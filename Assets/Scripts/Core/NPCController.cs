@@ -3,14 +3,14 @@ using Fungus;
 
 public class NPCController : MonoBehaviour
 {
-    public Flowchart flowchart;
-    public string interactionBlockName;
+    public Flowchart dialogFlowchart;
+    public string targetBlockName;
 
-    public void StartInteraction()
+    public void InitiateDialog()
     {
-        if (flowchart != null && !flowchart.HasExecutingBlocks())
+        if (dialogFlowchart != null && !dialogFlowchart.HasExecutingBlocks())
         {
-            flowchart.ExecuteBlock(interactionBlockName);
+            dialogFlowchart.ExecuteBlock(targetBlockName);
         }
     }
 }

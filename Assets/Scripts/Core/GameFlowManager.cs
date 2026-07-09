@@ -1,41 +1,80 @@
 // this code has reference to that script file code
 using UnityEngine;
 using UnityEngine.Playables;
+using Fungus;
+
+public enum GameState
+{
+    Exploration,
+    Dialog,
+    Combat,
+    Cutscene
+}
 
 public class GameFlowManager : MonoBehaviour
 {
-    public PlayerController playerController;
-    public CombatManager combatManager;
-    public PlayableDirector battleCameraSequence;
-    public PlayableDirector cutsceneSequence;
-    public Transform postBattleWalkTarget;
+    public PlayerController mainPlayerController;
+    public CombatManager mainCombatManager;
+    public PlayableDirector battleCameraDirector;
+    public PlayableDirector postBattleCutsceneDirector;
+    public Transform postBattleMovementTarget;
 
-    public void StartBattleSequence()
+    private GameState currentGameState;
+
+    private void Start()
     {
-        playerController.canMove = false;
-        battleCameraSequence.Play();
-        Invoke("InitializeCombat", (float)battleCameraSequence.duration);
+        ChangeGameState(GameState.Exploration);
     }
 
-    private void InitializeCombat()
+    public void ChangeGameState(GameState newState)
     {
-        combatManager.StartCombat(this);
+        currentGameState = newState;
+        ProcessStateChange();
     }
 
-    public void OnBattleEnded()
+    private void ProcessStateChange()
     {
-        Fungus.Flowchart.BroadcastFungusMessage("BattleEnded");
+        switch (currentGameState)
+        {
+            case GameState.Exploration:
+                mainPlayerController.canMove = true;
+                break;
+            case GameState.Dialog:
+            case GameState.Combat:
+            case GameState.Cutscene:
+                mainPlayerController.canMove = false;
+                break;
+        }
     }
 
-    public void StartPostBattleCutscene()
+    public void TriggerBattleSequence()
     {
-        cutsceneSequence.Play();
-        playerController.PlayHappyAnimation();
-        Invoke("StartAutoWalkOut", 3f);
+        ChangeGameState(GameState.Combat);
+        battleCameraDirector.Play();
+        Invoke("StartCombatLogic", (float)battleCameraDirector.duration);
     }
 
-    private void StartAutoWalkOut()
+    private void StartCombatLogic()
     {
-        playerController.SetAutoMove(postBattleWalkTarget);
+        mainCombatManager.InitializeCombatSequence(this);
+    }
+
+    public void ProcessBattleCompletion()
+    {
+        ChangeGameState(GameState.Dialog);
+        Flowchart.BroadcastFungusMessage("BattleEnded");
+    }
+
+    public void TriggerPostBattleCutscene()
+    {
+        ChangeGameState(GameState.Cutscene);
+        postBattleCutsceneDirector.Play();
+        mainPlayerController.ExecuteHappyAnimation();
+        Invoke("TriggerPlayerAutoMovement", 3f);
+    }
+
+    private void TriggerPlayerAutoMovement()
+    {
+        mainPlayerController.TriggerAutoMovement(postBattleMovementTarget);
     }
 }

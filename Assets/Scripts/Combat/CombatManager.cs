@@ -4,34 +4,34 @@ using System.Collections;
 
 public class CombatManager : MonoBehaviour
 {
-    public UnitData playerStats;
-    public UnitData enemyStats;
+    public UnitData playerUnitData;
+    public UnitData enemyUnitData;
     private int currentPlayerHealth;
     private int currentEnemyHealth;
-    private GameFlowManager flowManager;
+    private GameFlowManager activeFlowManager;
 
-    public void StartCombat(GameFlowManager manager)
+    public void InitializeCombatSequence(GameFlowManager flowManagerInstance)
     {
-        flowManager = manager;
-        currentPlayerHealth = playerStats.maxHealth;
-        currentEnemyHealth = enemyStats.maxHealth;
-        StartCoroutine(CombatRoutine());
+        activeFlowManager = flowManagerInstance;
+        currentPlayerHealth = playerUnitData.maxHealth;
+        currentEnemyHealth = enemyUnitData.maxHealth;
+        StartCoroutine(ExecuteTurnBasedCombat());
     }
 
-    private IEnumerator CombatRoutine()
+    private IEnumerator ExecuteTurnBasedCombat()
     {
-        yield return new WaitForSeconds(1f);
-        currentEnemyHealth -= playerStats.attackPower;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
+        currentEnemyHealth -= playerUnitData.attackPower;
+        yield return new WaitForSeconds(1.5f);
 
         if (currentEnemyHealth <= 0)
         {
-            EndCombat();
+            TerminateCombatSequence();
         }
     }
 
-    private void EndCombat()
+    private void TerminateCombatSequence()
     {
-        flowManager.OnBattleEnded();
+        activeFlowManager.ProcessBattleCompletion();
     }
 }

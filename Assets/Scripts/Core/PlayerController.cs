@@ -4,17 +4,20 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 5f;
+    public float rotationSmoothTime = 0.1f;
     public Animator animator;
     public bool canMove = true;
     public bool isAutoMoving = false;
     public Transform autoMoveTarget;
+
     private NPCController currentNPC;
+    private float currentVelocity;
 
     private void Update()
     {
         if (isAutoMoving && autoMoveTarget != null)
         {
-            MoveTowardsTarget();
+            ExecuteAutoMovement();
             return;
         }
 
@@ -24,21 +27,22 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        HandleMovement();
-        HandleInteraction();
+        ExecuteManualMovement();
+        CheckInteractionInput();
     }
 
-    private void HandleMovement()
+    private void ExecuteManualMovement()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-        Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        float verticalInput = Input.GetAxisRaw("Vertical");
+        Vector3 inputDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
 
-        if (direction.magnitude >= 0.1f)
+        if (inputDirection.magnitude >= 0.1f)
         {
-            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
-            transform.Translate(direction * moveSpeed * Time.deltaTime, Space.World);
+            float targetAngle = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg;
+            float smoothedAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref currentVelocity, rotationSmoothTime);
+            transform.rotation = Quaternion.Euler(0f, smoothedAngle, 0f);
+            transform.Translate(inputDirection * moveSpeed * Time.deltaTime, Space.World);
             animator.SetBool("isWalking", true);
         }
         else
@@ -47,31 +51,33 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void HandleInteraction()
+    private void CheckInteractionInput()
     {
         if (Input.GetKeyDown(KeyCode.Space) && currentNPC != null)
         {
-            currentNPC.StartInteraction();
+            currentNPC.InitiateDialog();
         }
     }
 
-    public void SetAutoMove(Transform target)
+    public void TriggerAutoMovement(Transform targetTransform)
     {
         canMove = false;
         isAutoMoving = true;
-        autoMoveTarget = target;
+        autoMoveTarget = targetTransform;
     }
 
-    private void MoveTowardsTarget()
+    private void ExecuteAutoMovement()
     {
-        Vector3 direction = (autoMoveTarget.position - transform.position).normalized;
-        direction.y = 0;
+        Vector3 directionToTarget = (autoMoveTarget.position - transform.position).normalized;
+        directionToTarget.y = 0;
+        float distanceToTarget = Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(autoMoveTarget.position.x, 0, autoMoveTarget.position.z));
 
-        if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(autoMoveTarget.position.x, 0, autoMoveTarget.position.z)) > 0.1f)
+        if (distanceToTarget > 0.1f)
         {
-            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
-            transform.Translate(direction * moveSpeed * Time.deltaTime, Space.World);
+            float targetAngle = Mathf.Atan2(directionToTarget.x, directionToTarget.z) * Mathf.Rad2Deg;
+            float smoothedAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref currentVelocity, rotationSmoothTime);
+            transform.rotation = Quaternion.Euler(0f, smoothedAngle, 0f);
+            transform.Translate(directionToTarget * moveSpeed * Time.deltaTime, Space.World);
             animator.SetBool("isWalking", true);
         }
         else
@@ -81,23 +87,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider otherCollider)
     {
-        if (other.CompareTag("NPC"))
+        if (otherCollider.CompareTag("NPC"))
         {
-            currentNPC = other.GetComponent<NPCController>();
+            currentNPC = otherCollider.GetComponent<NPCController>();
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider otherCollider)
     {
-        if (other.CompareTag("NPC"))
+        if (otherCollider.CompareTag("NPC"))
         {
             currentNPC = null;
         }
     }
 
-    public void PlayHappyAnimation()
+    public void ExecuteHappyAnimation()
     {
         animator.SetTrigger("happyTrigger");
     }

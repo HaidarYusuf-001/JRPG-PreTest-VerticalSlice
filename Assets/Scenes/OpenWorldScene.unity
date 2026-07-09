@@ -262,9 +262,9 @@ MonoBehaviour:
     width: 1114
     height: 859
   selectedBlocks:
-  - {fileID: 100739404}
+  - {fileID: 100739398}
   selectedCommands:
-  - {fileID: 100739403}
+  - {fileID: 100739397}
   variables: []
   description: 
   stepPause: 0
@@ -296,8 +296,8 @@ MonoBehaviour:
     Culture=neutral, PublicKeyToken=null
   targetComponentFullname: 'UnityEngine.Component[]'
   targetComponentText: GameFlowManager
-  targetMethod: StartBattleSequence
-  targetMethodText: 'StartBattleSequence (): Void'
+  targetMethod: TriggerBattleSequence
+  targetMethodText: 'TriggerBattleSequence (): Void'
   methodParameters: []
   saveReturnValue: 0
   returnValueVariableKey: 
@@ -435,8 +435,8 @@ MonoBehaviour:
     Culture=neutral, PublicKeyToken=null
   targetComponentFullname: 'UnityEngine.Component[]'
   targetComponentText: GameFlowManager
-  targetMethod: StartPostBattleCutscene
-  targetMethodText: 'StartPostBattleCutscene (): Void'
+  targetMethod: TriggerPostBattleCutscene
+  targetMethodText: 'TriggerPostBattleCutscene (): Void'
   methodParameters: []
   saveReturnValue: 0
   returnValueVariableKey: 
@@ -1020,8 +1020,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4c508ef68cb64844b2d27112a5cb7cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CombatManager
-  playerStats: {fileID: 11400000, guid: af54509a900059c4faaa29347e5dfc48, type: 2}
-  enemyStats: {fileID: 11400000, guid: 512e9317436e3fe4785cffc8919e7de7, type: 2}
+  playerUnitData: {fileID: 11400000, guid: af54509a900059c4faaa29347e5dfc48, type: 2}
+  enemyUnitData: {fileID: 11400000, guid: 512e9317436e3fe4785cffc8919e7de7, type: 2}
 --- !u!114 &1760888880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1034,11 +1034,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38ff2be2f8f9454468d3b08221ba1f38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameFlowManager
-  playerController: {fileID: 1303262594}
-  combatManager: {fileID: 1760888879}
-  battleCameraSequence: {fileID: 188939917}
-  cutsceneSequence: {fileID: 1977193179}
-  postBattleWalkTarget: {fileID: 1938938906}
+  mainPlayerController: {fileID: 1303262594}
+  mainCombatManager: {fileID: 1760888879}
+  battleCameraDirector: {fileID: 188939917}
+  postBattleCutsceneDirector: {fileID: 1977193179}
+  postBattleMovementTarget: {fileID: 1938938906}
 --- !u!4 &1760888881
 Transform:
   m_ObjectHideFlags: 0
@@ -1189,6 +1189,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 163161937867053704, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
       propertyPath: m_Name
+      value: NPC
+      objectReference: {fileID: 0}
+    - target: {fileID: 163161937867053704, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+      propertyPath: m_TagString
       value: NPC
       objectReference: {fileID: 0}
     - target: {fileID: 650904594097782834, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}

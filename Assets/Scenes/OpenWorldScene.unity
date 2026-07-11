@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 5238036}
   - component: {fileID: 5238035}
   - component: {fileID: 5238038}
+  - component: {fileID: 5238039}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -205,8 +206,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5238034}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.07236785, y: 0, z: 0, w: 0.99737805}
-  m_LocalPosition: {x: 0.2, y: 1.15, z: -1.5}
+  m_LocalRotation: {x: 0.137531, y: 0, z: 0, w: 0.99049747}
+  m_LocalPosition: {x: -0.59, y: 2.648, z: -11.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -256,6 +257,43 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &5238039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5238034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBrain
+  ShowDebugText: 0
+  ShowCameraFrustum: 1
+  IgnoreTimeScale: 0
+  WorldUpOverride: {fileID: 0}
+  ChannelMask: -1
+  UpdateMethod: 2
+  BlendUpdateMethod: 1
+  LensModeOverride:
+    Enabled: 0
+    DefaultMode: 2
+  DefaultBlend:
+    Style: 1
+    Time: 2
+    CustomCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  CustomBlends: {fileID: 0}
+--- !u!4 &71010203 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8967809066569396908, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+  m_PrefabInstance: {fileID: 461845092950557434}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &100739395
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,8 +304,6 @@ GameObject:
   m_Component:
   - component: {fileID: 100739402}
   - component: {fileID: 100739396}
-  - component: {fileID: 100739401}
-  - component: {fileID: 100739400}
   - component: {fileID: 100739398}
   - component: {fileID: 100739399}
   - component: {fileID: 100739397}
@@ -295,11 +331,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: 33.489388, y: 54.02837}
+  scrollPos: {x: 103.19253, y: 125.46388}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
   blockViewHeight: 226.66669
-  zoom: 0.94000006
+  zoom: 0.8200002
   scrollViewRect:
     serializedVersion: 2
     x: -343
@@ -307,9 +343,8 @@ MonoBehaviour:
     width: 1114
     height: 859
   selectedBlocks:
-  - {fileID: 100739404}
-  selectedCommands:
-  - {fileID: 100739405}
+  - {fileID: 100739398}
+  selectedCommands: []
   variables: []
   description: 
   stepPause: 0
@@ -363,7 +398,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Fungus::Fungus.Block
   nodeRect:
     serializedVersion: 2
-    x: 227.50351
+    x: 228.3165
     y: 67.248215
     width: 146.99335
     height: 40
@@ -404,47 +439,6 @@ MonoBehaviour:
   stopVoiceover: 1
   waitForVO: 0
   setSayDialog: {fileID: 1062351233}
---- !u!114 &100739400
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100739395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2f6487d21a03404cb21b245f0242e79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parentBlock: {fileID: 100739401}
-  suppressBlockAutoSelect: 0
-  waitForFrames: 1
---- !u!114 &100739401
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100739395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d3d73aef2cfc4f51abf34ac00241f60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nodeRect:
-    serializedVersion: 2
-    x: 67
-    y: 70
-    width: 110.18666
-    height: 40
-  tint: {r: 1, g: 1, b: 1, a: 1}
-  useCustomTint: 0
-  itemId: 0
-  blockName: New Block
-  description: 
-  eventHandler: {fileID: 100739400}
-  commandList: []
-  suppressAllAutoSelections: 0
 --- !u!4 &100739402
 Transform:
   m_ObjectHideFlags: 0
@@ -558,6 +552,11 @@ MonoBehaviour:
   parentBlock: {fileID: 100739404}
   suppressBlockAutoSelect: 0
   message: BattleEnded
+--- !u!1 &125943365 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 615763826570830567, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+  m_PrefabInstance: {fileID: 461845092950557434}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &135781214
 GameObject:
   m_ObjectHideFlags: 0
@@ -981,6 +980,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 516383165}
   m_CullTransparentMesh: 1
+--- !u!1 &526821447
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 526821449}
+  - component: {fileID: 526821448}
+  m_Layer: 0
+  m_Name: Cam_Dialog
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &526821448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 526821447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
+  Priority:
+    Enabled: 0
+    m_Value: 0
+  OutputChannel: 1
+  StandbyUpdate: 2
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
+  Target:
+    TrackingTarget: {fileID: 0}
+    LookAtTarget: {fileID: 0}
+    CustomLookAtTarget: 0
+  Lens:
+    FieldOfView: 60.000004
+    OrthographicSize: 5
+    NearClipPlane: 0.3
+    FarClipPlane: 1000
+    Dutch: 0
+    ModeOverride: 0
+    PhysicalProperties:
+      GateFit: 2
+      SensorSize: {x: 21.946, y: 16.002}
+      LensShift: {x: 0, y: 0}
+      FocusDistance: 10
+      Iso: 200
+      ShutterSpeed: 0.005
+      Aperture: 16
+      BladeCount: 5
+      Curvature: {x: 2, y: 11}
+      BarrelClipping: 0.25
+      Anamorphism: 0
+  BlendHint: 0
+--- !u!4 &526821449
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 526821447}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.11982132, y: 0.23787358, z: -0.029888757, w: -0.9634136}
+  m_LocalPosition: {x: 5.4025292, y: 4.9398527, z: -16.158482}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &542275892
 GameObject:
   m_ObjectHideFlags: 0
@@ -1810,6 +1884,101 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1219711293
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1219711296}
+  - component: {fileID: 1219711295}
+  - component: {fileID: 1219711294}
+  m_Layer: 0
+  m_Name: Cam_Follow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1219711294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1219711293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b617507da6d07e749b7efdb34e1173e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineFollow
+  TrackerSettings:
+    BindingMode: 4
+    PositionDamping: {x: 1, y: 1, z: 1}
+    AngularDampingMode: 0
+    RotationDamping: {x: 1, y: 1, z: 1}
+    QuaternionDamping: 1
+  FollowOffset: {x: 0, y: 2.44, z: -4.67}
+--- !u!114 &1219711295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1219711293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
+  Priority:
+    Enabled: 0
+    m_Value: 0
+  OutputChannel: 1
+  StandbyUpdate: 2
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
+  Target:
+    TrackingTarget: {fileID: 1303262599}
+    LookAtTarget: {fileID: 0}
+    CustomLookAtTarget: 0
+  Lens:
+    FieldOfView: 49.77
+    OrthographicSize: 5
+    NearClipPlane: 0.3
+    FarClipPlane: 1000
+    Dutch: 0
+    ModeOverride: 0
+    PhysicalProperties:
+      GateFit: 2
+      SensorSize: {x: 21.946, y: 16.002}
+      LensShift: {x: 0, y: 0}
+      FocusDistance: 10
+      Iso: 200
+      ShutterSpeed: 0.005
+      Aperture: 16
+      BladeCount: 5
+      Curvature: {x: 2, y: 11}
+      BarrelClipping: 0.25
+      Anamorphism: 0
+  BlendHint: 0
+--- !u!4 &1219711296
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1219711293}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.137531, y: 0, z: 0, w: 0.99049747}
+  m_LocalPosition: {x: -0.59, y: 2.648, z: -11.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 15.81, y: 0, z: 0}
 --- !u!1001 &1303262593
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1910,6 +2079,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25fb867d2049d41f597aefdd6b19f598, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Fungus::Fungus.Character
+--- !u!4 &1303262599 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8499418267516354374, guid: 37a9aae3756a2b2488fca007473bb3be, type: 3}
+  m_PrefabInstance: {fileID: 1303262593}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1364840666 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 163161937867053704, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+  m_PrefabInstance: {fileID: 461845092950557434}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1447146609
 GameObject:
   m_ObjectHideFlags: 0
@@ -2053,7 +2232,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1760888881}
   - component: {fileID: 1760888880}
-  - component: {fileID: 1760888879}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2061,27 +2239,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1760888879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1760888878}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4c508ef68cb64844b2d27112a5cb7cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CombatManager
-  battleUIManager: {fileID: 0}
-  battleEntryDirector: {fileID: 0}
-  playerSpawnPoint: {fileID: 0}
-  enemySpawnPoint: {fileID: 0}
-  vcamBattleMain: {fileID: 0}
-  vcamPlayerAction: {fileID: 0}
-  vcamEnemyAction: {fileID: 0}
-  actionMovementSpeed: 8
-  attackDistanceOffset: 1.5
 --- !u!114 &1760888880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2099,6 +2256,8 @@ MonoBehaviour:
   postBattleMovementTarget: {fileID: 1938938906}
   explorationMainCamera: {fileID: 5238036}
   playerUnitData: {fileID: 11400000, guid: af54509a900059c4faaa29347e5dfc48, type: 2}
+  vcamExplorationFollow: {fileID: 1219711293}
+  vcamExplorationDialog: {fileID: 526821447}
 --- !u!4 &1760888881
 Transform:
   m_ObjectHideFlags: 0
@@ -2318,6 +2477,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1987922723 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8399346537456501362, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+  m_PrefabInstance: {fileID: 461845092950557434}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2016851476
 GameObject:
   m_ObjectHideFlags: 0
@@ -2422,6 +2586,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8789460195759659218, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+      propertyPath: m_Height
+      value: 1.616582
+      objectReference: {fileID: 0}
+    - target: {fileID: -8789460195759659218, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+      propertyPath: m_Radius
+      value: 0.5210998
+      objectReference: {fileID: 0}
+    - target: {fileID: -8789460195759659218, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+      propertyPath: m_Center.x
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: -8789460195759659218, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+      propertyPath: m_Center.y
+      value: 0.62302786
+      objectReference: {fileID: 0}
+    - target: {fileID: -8789460195759659218, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+      propertyPath: m_Center.z
+      value: -0.06652856
+      objectReference: {fileID: 0}
+    - target: {fileID: -8789460195759659218, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -1442323304078185328, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
       propertyPath: nameText
       value: Goblin
@@ -2495,29 +2683,74 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 100739396}
     - target: {fileID: 6191028378718205362, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+      propertyPath: targetBlockName
+      value: StartBattleDialog
+      objectReference: {fileID: 0}
+    - target: {fileID: 6191028378718205362, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
       propertyPath: activeFlowManager
       value: 
       objectReference: {fileID: 1760888880}
     - target: {fileID: 6191028378718205362, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+      propertyPath: dialogCameraPoint
+      value: 
+      objectReference: {fileID: 1987922723}
+    - target: {fileID: 6191028378718205362, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+      propertyPath: dialogLookAtPoint
+      value: 
+      objectReference: {fileID: 71010203}
+    - target: {fileID: 6191028378718205362, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+      propertyPath: interactionPrompt
+      value: 
+      objectReference: {fileID: 125943365}
+    - target: {fileID: 6191028378718205362, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
       propertyPath: interactionBlockName
       value: StartBattleDialog
+      objectReference: {fileID: 0}
+    - target: {fileID: 7968394967980543268, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 163161937867053704, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 461845092950557439}
   m_SourcePrefab: {fileID: 100100000, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
 --- !u!114 &461845092950557435 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -1442323304078185328, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
   m_PrefabInstance: {fileID: 461845092950557434}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1364840666}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 25fb867d2049d41f597aefdd6b19f598, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Fungus::Fungus.Character
+--- !u!95 &461845092950557439
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364840666}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: efd331d4b11709f40b82377af7a18459, type: 3}
+  m_Controller: {fileID: 9100000, guid: fdfa61d1703a5ec40b675c77285a07f4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2538,3 +2771,5 @@ SceneRoots:
   - {fileID: 478671086}
   - {fileID: 135781218}
   - {fileID: 385929642}
+  - {fileID: 1219711296}
+  - {fileID: 526821449}

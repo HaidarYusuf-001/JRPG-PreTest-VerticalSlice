@@ -21,6 +21,9 @@ public class GameFlowManager : MonoBehaviour
     public Camera explorationMainCamera;
     public UnitData playerUnitData;
 
+    public GameObject vcamExplorationFollow;
+    public GameObject vcamExplorationDialog;
+
     private GameState currentGameState;
     private CombatManager activeCombatManager;
     private UnitData currentTargetEnemyData;
@@ -42,6 +45,8 @@ public class GameFlowManager : MonoBehaviour
         {
             case GameState.Exploration:
                 mainPlayerController.canMove = true;
+                vcamExplorationFollow.SetActive(true);
+                vcamExplorationDialog.SetActive(false);
                 break;
             case GameState.Dialog:
             case GameState.Combat:
@@ -54,6 +59,16 @@ public class GameFlowManager : MonoBehaviour
     public void SetCurrentEnemyData(UnitData enemyData)
     {
         currentTargetEnemyData = enemyData;
+    }
+
+    public void TriggerDialogSequence(NPCController activeNPC)
+    {
+        ChangeGameState(GameState.Dialog);
+        vcamExplorationFollow.SetActive(false);
+
+        vcamExplorationDialog.transform.position = activeNPC.dialogCameraPoint.position;
+        vcamExplorationDialog.transform.LookAt(activeNPC.dialogLookAtPoint);
+        vcamExplorationDialog.SetActive(true);
     }
 
     public void TriggerBattleSequence()
@@ -98,6 +113,9 @@ public class GameFlowManager : MonoBehaviour
     public void TriggerPostBattleCutscene()
     {
         ChangeGameState(GameState.Cutscene);
+        vcamExplorationDialog.SetActive(false);
+        vcamExplorationFollow.SetActive(true);
+
         postBattleCutsceneDirector.Play();
         mainPlayerController.ExecuteHappyAnimation();
         Invoke("TriggerPlayerAutoMovement", 3f);
@@ -106,5 +124,10 @@ public class GameFlowManager : MonoBehaviour
     private void TriggerPlayerAutoMovement()
     {
         mainPlayerController.TriggerAutoMovement(postBattleMovementTarget);
+    }
+
+    public void RestoreExplorationState()
+    {
+        ChangeGameState(GameState.Exploration);
     }
 }

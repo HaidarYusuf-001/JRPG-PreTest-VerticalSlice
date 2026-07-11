@@ -84,6 +84,7 @@ public class PlayerController : MonoBehaviour
         {
             isAutoMoving = false;
             animator.SetBool("isWalking", false);
+            canMove = true;
         }
     }
 
@@ -92,6 +93,10 @@ public class PlayerController : MonoBehaviour
         if (otherCollider.CompareTag("NPC"))
         {
             currentNPC = otherCollider.GetComponent<NPCController>();
+            if (currentNPC != null)
+            {
+                currentNPC.SetPromptVisibility(true);
+            }
         }
     }
 
@@ -99,7 +104,11 @@ public class PlayerController : MonoBehaviour
     {
         if (otherCollider.CompareTag("NPC"))
         {
-            currentNPC = null;
+            if (currentNPC != null)
+            {
+                currentNPC.SetPromptVisibility(false);
+                currentNPC = null;
+            }
         }
     }
 

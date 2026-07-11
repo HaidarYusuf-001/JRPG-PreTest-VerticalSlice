@@ -1,10 +1,12 @@
-// this code has reference to that script file code
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Playables;
+using System;
 
 public class CombatManager : MonoBehaviour
 {
+    public event Action OnCombatCompleted;
+
     public BattleUIManager battleUIManager;
     public PlayableDirector battleEntryDirector;
 
@@ -12,8 +14,7 @@ public class CombatManager : MonoBehaviour
     public Transform enemySpawnPoint;
 
     public GameObject vcamBattleMain;
-    public GameObject vcamPlayerAction;
-    public GameObject vcamEnemyAction;
+    public GameObject vcamAction;
 
     public float actionMovementSpeed = 8f;
     public float attackDistanceOffset = 1.5f;
@@ -22,16 +23,12 @@ public class CombatManager : MonoBehaviour
     private UnitData activeEnemyUnitData;
     private int currentPlayerHealth;
     private int currentEnemyHealth;
-    private GameFlowManager activeFlowManager;
 
     private GameObject activePlayerInstance;
     private GameObject activeEnemyInstance;
-    private Animator playerAnimator;
-    private Animator enemyAnimator;
 
-    public void InitializeDynamicCombatSequence(GameFlowManager flowManagerInstance, UnitData playerData, UnitData enemyData)
+    public void InitializeDynamicCombatSequence(UnitData playerData, UnitData enemyData)
     {
-        activeFlowManager = flowManagerInstance;
         activePlayerUnitData = playerData;
         activeEnemyUnitData = enemyData;
 
@@ -50,16 +47,12 @@ public class CombatManager : MonoBehaviour
     {
         activePlayerInstance = Instantiate(activePlayerUnitData.unitPrefab, playerSpawnPoint.position, playerSpawnPoint.rotation);
         activeEnemyInstance = Instantiate(activeEnemyUnitData.unitPrefab, enemySpawnPoint.position, enemySpawnPoint.rotation);
-
-        playerAnimator = activePlayerInstance.GetComponent<Animator>();
-        enemyAnimator = activeEnemyInstance.GetComponent<Animator>();
     }
 
     private void ConfigureCameras()
     {
         vcamBattleMain.SetActive(true);
-        vcamPlayerAction.SetActive(false);
-        vcamEnemyAction.SetActive(false);
+        vcamAction.SetActive(false);
     }
 
     private void StartFirstTurn()
@@ -69,25 +62,26 @@ public class CombatManager : MonoBehaviour
 
     public void ProcessPlayerTurn()
     {
-        StartCoroutine(ExecuteActionSequence(activePlayerInstance, activeEnemyInstance, vcamPlayerAction, true));
+        StartCoroutine(ExecuteActionSequence(activePlayerInstance, activeEnemyInstance, true));
     }
 
     private IEnumerator ExecuteEnemyTurn()
     {
         yield return new WaitForSeconds(0.5f);
-        StartCoroutine(ExecuteActionSequence(activeEnemyInstance, activePlayerInstance, vcamEnemyAction, false));
+        StartCoroutine(ExecuteActionSequence(activeEnemyInstance, activePlayerInstance, false));
     }
 
-    private IEnumerator ExecuteActionSequence(GameObject attacker, GameObject target, GameObject actionCamera, bool isPlayerTurn)
+    private IEnumerator ExecuteActionSequence(GameObject attacker, GameObject target, bool isPlayerTurn)
     {
-        vcamBattleMain.SetActive(false);
-        actionCamera.SetActive(true);
-
         Vector3 startPosition = attacker.transform.position;
-        Vector3 targetPosition = target.transform.position + (attacker.transform.position - target.transform.position).normalized * attackDistanceOffset;
+        Vector3 directionToTarget = (target.transform.position - attacker.transform.position).normalized;
+        Vector3 targetPosition = target.transform.position - (directionToTarget * attackDistanceOffset);
+
+        vcamBattleMain.SetActive(false);
+        vcamAction.SetActive(true);
 
         Animator attackerAnimator = attacker.GetComponent<Animator>();
-        attackerAnimator.SetBool("isWalking", true);
+        if (attackerAnimator != null) attackerAnimator.SetBool("isWalking", true);
 
         while (Vector3.Distance(attacker.transform.position, targetPosition) > 0.1f)
         {
@@ -95,7 +89,7 @@ public class CombatManager : MonoBehaviour
             yield return null;
         }
 
-        attackerAnimator.SetBool("isWalking", false);
+        if (attackerAnimator != null) attackerAnimator.SetBool("isWalking", false);
         yield return new WaitForSeconds(0.5f);
 
         if (isPlayerTurn)
@@ -110,7 +104,11 @@ public class CombatManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.5f);
-        attackerAnimator.SetBool("isWalking", true);
+
+        vcamAction.SetActive(false);
+        vcamBattleMain.SetActive(true);
+
+        if (attackerAnimator != null) attackerAnimator.SetBool("isWalking", true);
 
         Vector3 directionBack = (startPosition - attacker.transform.position).normalized;
         if (directionBack != Vector3.zero)
@@ -124,11 +122,8 @@ public class CombatManager : MonoBehaviour
             yield return null;
         }
 
-        attackerAnimator.SetBool("isWalking", false);
+        if (attackerAnimator != null) attackerAnimator.SetBool("isWalking", false);
         attacker.transform.rotation = isPlayerTurn ? playerSpawnPoint.rotation : enemySpawnPoint.rotation;
-
-        actionCamera.SetActive(false);
-        vcamBattleMain.SetActive(true);
 
         yield return new WaitForSeconds(0.5f);
         CheckCombatState(isPlayerTurn);
@@ -164,6 +159,6 @@ public class CombatManager : MonoBehaviour
     {
         Destroy(activePlayerInstance);
         Destroy(activeEnemyInstance);
-        activeFlowManager.ProcessBattleCompletion();
+        OnCombatCompleted?.Invoke();
     }
 }

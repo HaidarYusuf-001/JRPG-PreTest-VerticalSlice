@@ -1,9 +1,9 @@
-// this code has reference to that script file code
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 using Fungus;
 using System.Collections;
+using Unity.Cinemachine;
 
 public enum GameState
 {
@@ -15,6 +15,8 @@ public enum GameState
 
 public class GameFlowManager : MonoBehaviour
 {
+    public static GameFlowManager Instance { get; private set; }
+
     public PlayerController mainPlayerController;
     public PlayableDirector postBattleCutsceneDirector;
     public Transform postBattleMovementTarget;
@@ -24,14 +26,25 @@ public class GameFlowManager : MonoBehaviour
     public GameObject vcamExplorationFollow;
     public GameObject vcamExplorationDialog;
 
-    public Vector3 dialogCameraOffset = new Vector3(1.5f, 2f, -2.5f);
-
+    private CinemachineCamera cinemachineDialogCamera;
     private GameState currentGameState;
-    private CombatManager activeCombatManager;
     private UnitData currentTargetEnemyData;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {
+        cinemachineDialogCamera = vcamExplorationDialog.GetComponent<CinemachineCamera>();
         ChangeGameState(GameState.Exploration);
     }
 
@@ -46,7 +59,7 @@ public class GameFlowManager : MonoBehaviour
         switch (currentGameState)
         {
             case GameState.Exploration:
-                mainPlayerController.canMove = true;
+                mainPlayerController.SetMovementState(true);
                 vcamExplorationFollow.SetActive(true);
                 vcamExplorationDialog.SetActive(false);
 
@@ -59,7 +72,7 @@ public class GameFlowManager : MonoBehaviour
             case GameState.Dialog:
             case GameState.Combat:
             case GameState.Cutscene:
-                mainPlayerController.canMove = false;
+                mainPlayerController.SetMovementState(false);
 
                 NPCController currentNPC = mainPlayerController.GetCurrentNPC();
                 if (currentNPC != null)
@@ -80,9 +93,11 @@ public class GameFlowManager : MonoBehaviour
         ChangeGameState(GameState.Dialog);
         vcamExplorationFollow.SetActive(false);
 
-        Transform playerTransform = mainPlayerController.transform;
-        vcamExplorationDialog.transform.position = playerTransform.position + playerTransform.TransformDirection(dialogCameraOffset);
-        vcamExplorationDialog.transform.LookAt(activeNPC.dialogLookAtPoint);
+        if (cinemachineDialogCamera != null)
+        {
+            cinemachineDialogCamera.LookAt = activeNPC.dialogLookAtPoint;
+        }
+
         vcamExplorationDialog.SetActive(true);
     }
 
@@ -102,11 +117,12 @@ public class GameFlowManager : MonoBehaviour
             yield return null;
         }
 
-        activeCombatManager = Object.FindAnyObjectByType<CombatManager>();
-        activeCombatManager.InitializeDynamicCombatSequence(this, playerUnitData, currentTargetEnemyData);
+        CombatManager activeCombatManager = Object.FindAnyObjectByType<CombatManager>();
+        activeCombatManager.OnCombatCompleted += HandleCombatCompletion;
+        activeCombatManager.InitializeDynamicCombatSequence(playerUnitData, currentTargetEnemyData);
     }
 
-    public void ProcessBattleCompletion()
+    private void HandleCombatCompletion()
     {
         StartCoroutine(UnloadBattleScene());
     }
@@ -131,9 +147,13 @@ public class GameFlowManager : MonoBehaviour
         vcamExplorationDialog.SetActive(false);
         vcamExplorationFollow.SetActive(true);
 
-        postBattleCutsceneDirector.Play();
+        if (postBattleCutsceneDirector != null)
+        {
+            postBattleCutsceneDirector.Play();
+        }
+
         mainPlayerController.ExecuteHappyAnimation();
-        Invoke("TriggerPlayerAutoMovement", 3f);
+        Invoke("TriggerPlayerAutoMovement", 0.5f);
     }
 
     private void TriggerPlayerAutoMovement()

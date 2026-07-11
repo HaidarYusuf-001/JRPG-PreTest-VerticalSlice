@@ -991,7 +991,6 @@ GameObject:
   - component: {fileID: 526821449}
   - component: {fileID: 526821448}
   - component: {fileID: 526821451}
-  - component: {fileID: 526821450}
   m_Layer: 0
   m_Name: Cam_Dialog
   m_TagString: Untagged
@@ -1057,35 +1056,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 17.523, y: 0, z: 0}
---- !u!114 &526821450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 526821447}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f38bda98361e1de48a4ca2bd86ea3c17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineRotationComposer
-  Composition:
-    ScreenPosition: {x: 0, y: 0}
-    DeadZone:
-      Enabled: 0
-      Size: {x: 0.2, y: 0.2}
-    HardLimits:
-      Enabled: 0
-      Size: {x: 0.8, y: 0.8}
-      Offset: {x: 0, y: 0}
-  CenterOnActivate: 1
-  TargetOffset: {x: -1.53, y: 0.51, z: 8.05}
-  Damping: {x: 0.5, y: 0.5}
-  Lookahead:
-    Enabled: 0
-    Time: 0
-    Smoothing: 0
-    IgnoreY: 0
 --- !u!114 &526821451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1099,7 +1069,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineFollow
   TrackerSettings:
-    BindingMode: 3
+    BindingMode: 4
     PositionDamping: {x: 1, y: 1, z: 1}
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
@@ -2876,7 +2846,6 @@ MonoBehaviour:
   playerUnitData: {fileID: 11400000, guid: af54509a900059c4faaa29347e5dfc48, type: 2}
   vcamExplorationFollow: {fileID: 1219711293}
   vcamExplorationDialog: {fileID: 526821447}
-  dialogCameraOffset: {x: 1.5, y: 2, z: -2.5}
 --- !u!4 &1760888881
 Transform:
   m_ObjectHideFlags: 0

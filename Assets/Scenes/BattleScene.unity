@@ -412,7 +412,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &738951889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1670,8 +1670,7 @@ MonoBehaviour:
   playerSpawnPoint: {fileID: 374246334}
   enemySpawnPoint: {fileID: 174186132}
   vcamBattleMain: {fileID: 1779632287}
-  vcamPlayerAction: {fileID: 738951888}
-  vcamEnemyAction: {fileID: 738951888}
+  vcamAction: {fileID: 738951888}
   actionMovementSpeed: 8
   attackDistanceOffset: 1.5
 --- !u!4 &1953620773

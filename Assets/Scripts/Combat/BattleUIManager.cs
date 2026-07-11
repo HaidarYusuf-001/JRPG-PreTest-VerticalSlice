@@ -1,4 +1,3 @@
-// this code has reference to that script file code
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;

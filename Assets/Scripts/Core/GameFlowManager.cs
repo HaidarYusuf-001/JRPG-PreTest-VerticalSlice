@@ -24,6 +24,8 @@ public class GameFlowManager : MonoBehaviour
     public GameObject vcamExplorationFollow;
     public GameObject vcamExplorationDialog;
 
+    public Vector3 dialogCameraOffset = new Vector3(1.5f, 2f, -2.5f);
+
     private GameState currentGameState;
     private CombatManager activeCombatManager;
     private UnitData currentTargetEnemyData;
@@ -47,11 +49,23 @@ public class GameFlowManager : MonoBehaviour
                 mainPlayerController.canMove = true;
                 vcamExplorationFollow.SetActive(true);
                 vcamExplorationDialog.SetActive(false);
+
+                NPCController activeNPC = mainPlayerController.GetCurrentNPC();
+                if (activeNPC != null)
+                {
+                    activeNPC.SetPromptVisibility(true);
+                }
                 break;
             case GameState.Dialog:
             case GameState.Combat:
             case GameState.Cutscene:
                 mainPlayerController.canMove = false;
+
+                NPCController currentNPC = mainPlayerController.GetCurrentNPC();
+                if (currentNPC != null)
+                {
+                    currentNPC.SetPromptVisibility(false);
+                }
                 break;
         }
     }
@@ -66,7 +80,8 @@ public class GameFlowManager : MonoBehaviour
         ChangeGameState(GameState.Dialog);
         vcamExplorationFollow.SetActive(false);
 
-        vcamExplorationDialog.transform.position = activeNPC.dialogCameraPoint.position;
+        Transform playerTransform = mainPlayerController.transform;
+        vcamExplorationDialog.transform.position = playerTransform.position + playerTransform.TransformDirection(dialogCameraOffset);
         vcamExplorationDialog.transform.LookAt(activeNPC.dialogLookAtPoint);
         vcamExplorationDialog.SetActive(true);
     }

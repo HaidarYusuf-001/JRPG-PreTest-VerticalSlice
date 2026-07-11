@@ -101,6 +101,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1957885472484179828}
   m_SourcePrefab: {fileID: 100100000, guid: efd331d4b11709f40b82377af7a18459, type: 3}
+--- !u!95 &2527596042312672572 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: efd331d4b11709f40b82377af7a18459, type: 3}
+  m_PrefabInstance: {fileID: 8248701830859217069}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &9131100254173095420 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: efd331d4b11709f40b82377af7a18459, type: 3}
@@ -170,7 +175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   moveSpeed: 5
   rotationSmoothTime: 0.1
-  animator: {fileID: 0}
+  animator: {fileID: 2527596042312672572}
   canMove: 1
   isAutoMoving: 0
   autoMoveTarget: {fileID: 0}

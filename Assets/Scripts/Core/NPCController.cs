@@ -8,24 +8,22 @@ public class NPCController : MonoBehaviour
     public string targetBlockName;
     public UnitData npcUnitData;
     public GameFlowManager activeFlowManager;
-
-    public GameObject interactionPrompt;
-    public Transform dialogCameraPoint;
     public Transform dialogLookAtPoint;
+    public CanvasGroup promptCanvasGroup;
 
     private void Start()
     {
-        if (interactionPrompt != null)
+        if (promptCanvasGroup != null)
         {
-            interactionPrompt.SetActive(false);
+            promptCanvasGroup.alpha = 0f;
         }
     }
 
     public void SetPromptVisibility(bool isVisible)
     {
-        if (interactionPrompt != null)
+        if (promptCanvasGroup != null)
         {
-            interactionPrompt.SetActive(isVisible);
+            promptCanvasGroup.alpha = isVisible ? 1f : 0f;
         }
     }
 

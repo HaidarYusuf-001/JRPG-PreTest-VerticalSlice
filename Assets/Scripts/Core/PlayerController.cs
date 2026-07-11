@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
 
         if (!canMove)
         {
-            animator.SetBool("isWalking", false);
+            if (animator != null) animator.SetBool("isWalking", false);
             return;
         }
 
@@ -43,11 +43,11 @@ public class PlayerController : MonoBehaviour
             float smoothedAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref currentVelocity, rotationSmoothTime);
             transform.rotation = Quaternion.Euler(0f, smoothedAngle, 0f);
             transform.Translate(inputDirection * moveSpeed * Time.deltaTime, Space.World);
-            animator.SetBool("isWalking", true);
+            if (animator != null) animator.SetBool("isWalking", true);
         }
         else
         {
-            animator.SetBool("isWalking", false);
+            if (animator != null) animator.SetBool("isWalking", false);
         }
     }
 
@@ -78,12 +78,12 @@ public class PlayerController : MonoBehaviour
             float smoothedAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref currentVelocity, rotationSmoothTime);
             transform.rotation = Quaternion.Euler(0f, smoothedAngle, 0f);
             transform.Translate(directionToTarget * moveSpeed * Time.deltaTime, Space.World);
-            animator.SetBool("isWalking", true);
+            if (animator != null) animator.SetBool("isWalking", true);
         }
         else
         {
             isAutoMoving = false;
-            animator.SetBool("isWalking", false);
+            if (animator != null) animator.SetBool("isWalking", false);
             canMove = true;
         }
     }
@@ -114,6 +114,11 @@ public class PlayerController : MonoBehaviour
 
     public void ExecuteHappyAnimation()
     {
-        animator.SetTrigger("happyTrigger");
+        if (animator != null) animator.SetTrigger("happyTrigger");
+    }
+
+    public NPCController GetCurrentNPC()
+    {
+        return currentNPC;
     }
 }

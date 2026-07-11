@@ -12,13 +12,14 @@ GameObject:
   - component: {fileID: 8394165274045467045}
   - component: {fileID: 2983592310091924419}
   - component: {fileID: 8169966296516647399}
+  - component: {fileID: 254140483062421024}
   m_Layer: 0
   m_Name: PromptCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &586039092570992931
 RectTransform:
   m_ObjectHideFlags: 0
@@ -103,6 +104,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!225 &254140483062421024
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 615763826570830567}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &2176242236827280926
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,9 +471,8 @@ MonoBehaviour:
   targetBlockName: 
   npcUnitData: {fileID: 11400000, guid: 512e9317436e3fe4785cffc8919e7de7, type: 2}
   activeFlowManager: {fileID: 0}
-  interactionPrompt: {fileID: 615763826570830567}
-  dialogCameraPoint: {fileID: 8399346537456501362}
   dialogLookAtPoint: {fileID: 8967809066569396908}
+  promptCanvasGroup: {fileID: 254140483062421024}
 --- !u!114 &-1442323304078185328
 MonoBehaviour:
   m_ObjectHideFlags: 0

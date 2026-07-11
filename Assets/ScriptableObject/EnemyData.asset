@@ -15,3 +15,4 @@ MonoBehaviour:
   unitName: Goblin
   maxHealth: 50
   attackPower: 10
+  unitPrefab: {fileID: 163161937867053704, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}

@@ -1,7 +1,9 @@
 // this code has reference to that script file code
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 using Fungus;
+using System.Collections;
 
 public enum GameState
 {
@@ -14,12 +16,14 @@ public enum GameState
 public class GameFlowManager : MonoBehaviour
 {
     public PlayerController mainPlayerController;
-    public CombatManager mainCombatManager;
-    public PlayableDirector battleCameraDirector;
     public PlayableDirector postBattleCutsceneDirector;
     public Transform postBattleMovementTarget;
+    public Camera explorationMainCamera;
+    public UnitData playerUnitData;
 
     private GameState currentGameState;
+    private CombatManager activeCombatManager;
+    private UnitData currentTargetEnemyData;
 
     private void Start()
     {
@@ -47,20 +51,46 @@ public class GameFlowManager : MonoBehaviour
         }
     }
 
+    public void SetCurrentEnemyData(UnitData enemyData)
+    {
+        currentTargetEnemyData = enemyData;
+    }
+
     public void TriggerBattleSequence()
     {
         ChangeGameState(GameState.Combat);
-        battleCameraDirector.Play();
-        Invoke("StartCombatLogic", (float)battleCameraDirector.duration);
+        StartCoroutine(LoadBattleSceneAdditive());
     }
 
-    private void StartCombatLogic()
+    private IEnumerator LoadBattleSceneAdditive()
     {
-        mainCombatManager.InitializeCombatSequence(this);
+        explorationMainCamera.gameObject.SetActive(false);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("BattleScene", LoadSceneMode.Additive);
+
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+
+        activeCombatManager = Object.FindAnyObjectByType<CombatManager>();
+        activeCombatManager.InitializeDynamicCombatSequence(this, playerUnitData, currentTargetEnemyData);
     }
 
     public void ProcessBattleCompletion()
     {
+        StartCoroutine(UnloadBattleScene());
+    }
+
+    private IEnumerator UnloadBattleScene()
+    {
+        AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync("BattleScene");
+
+        while (!asyncUnload.isDone)
+        {
+            yield return null;
+        }
+
+        explorationMainCamera.gameObject.SetActive(true);
         ChangeGameState(GameState.Dialog);
         Flowchart.BroadcastFungusMessage("BattleEnded");
     }

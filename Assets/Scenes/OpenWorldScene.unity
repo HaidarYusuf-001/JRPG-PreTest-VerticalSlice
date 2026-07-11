@@ -2073,8 +2073,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4c508ef68cb64844b2d27112a5cb7cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CombatManager
-  playerUnitData: {fileID: 11400000, guid: af54509a900059c4faaa29347e5dfc48, type: 2}
-  enemyUnitData: {fileID: 11400000, guid: 512e9317436e3fe4785cffc8919e7de7, type: 2}
+  battleUIManager: {fileID: 0}
+  battleEntryDirector: {fileID: 0}
+  playerSpawnPoint: {fileID: 0}
+  enemySpawnPoint: {fileID: 0}
+  vcamBattleMain: {fileID: 0}
+  vcamPlayerAction: {fileID: 0}
+  vcamEnemyAction: {fileID: 0}
+  actionMovementSpeed: 8
+  attackDistanceOffset: 1.5
 --- !u!114 &1760888880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2088,10 +2095,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameFlowManager
   mainPlayerController: {fileID: 1303262594}
-  mainCombatManager: {fileID: 1760888879}
-  battleCameraDirector: {fileID: 188939917}
   postBattleCutsceneDirector: {fileID: 1977193179}
   postBattleMovementTarget: {fileID: 1938938906}
+  explorationMainCamera: {fileID: 5238036}
+  playerUnitData: {fileID: 11400000, guid: af54509a900059c4faaa29347e5dfc48, type: 2}
 --- !u!4 &1760888881
 Transform:
   m_ObjectHideFlags: 0
@@ -2479,6 +2486,18 @@ PrefabInstance:
       propertyPath: flowchart
       value: 
       objectReference: {fileID: 100739396}
+    - target: {fileID: 6191028378718205362, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+      propertyPath: npcUnitData
+      value: 
+      objectReference: {fileID: 11400000, guid: 512e9317436e3fe4785cffc8919e7de7, type: 2}
+    - target: {fileID: 6191028378718205362, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+      propertyPath: dialogFlowchart
+      value: 
+      objectReference: {fileID: 100739396}
+    - target: {fileID: 6191028378718205362, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+      propertyPath: activeFlowManager
+      value: 
+      objectReference: {fileID: 1760888880}
     - target: {fileID: 6191028378718205362, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
       propertyPath: interactionBlockName
       value: StartBattleDialog

@@ -74,7 +74,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: efd331d4b11709f40b82377af7a18459, type: 3}
       propertyPath: m_Name
-      value: Enemy
+      value: Goblin
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: efd331d4b11709f40b82377af7a18459, type: 3}
       propertyPath: m_Controller
@@ -97,7 +97,7 @@ PrefabInstance:
       addedObject: {fileID: 5640467913624495714}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: efd331d4b11709f40b82377af7a18459, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7154833247987445511}
+      addedObject: {fileID: 5674245902919058518}
   m_SourcePrefab: {fileID: 100100000, guid: efd331d4b11709f40b82377af7a18459, type: 3}
 --- !u!1 &9064375099136681914 stripped
 GameObject:
@@ -114,7 +114,7 @@ Animator:
   m_GameObject: {fileID: 9064375099136681914}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: efd331d4b11709f40b82377af7a18459, type: 3}
-  m_Controller: {fileID: 9100000, guid: fdfa61d1703a5ec40b675c77285a07f4, type: 2}
+  m_Controller: {fileID: 9100000, guid: 7b6e782a83a178b43aaf0a8a7ae4efb3, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -149,7 +149,7 @@ CapsuleCollider:
   m_Height: 1.8730727
   m_Direction: 1
   m_Center: {x: -0.04972589, y: 0.76, z: 0}
---- !u!114 &7154833247987445511
+--- !u!114 &5674245902919058518
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,7 +158,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 9064375099136681914}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2845978406587a949818e77dc80a0f4e, type: 3}
+  m_Script: {fileID: 11500000, guid: 03b9931d27a13e642b3fad044a194f42, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyController
+  m_EditorClassIdentifier: Assembly-CSharp::BattleUnit
   actionMovementSpeed: 8
+  attackDistanceOffset: 1.5

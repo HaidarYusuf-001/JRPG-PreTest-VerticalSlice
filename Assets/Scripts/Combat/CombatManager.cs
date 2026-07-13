@@ -16,8 +16,6 @@ public class CombatManager : MonoBehaviour
     public GameObject vcamBattleMain;
     public GameObject vcamAction;
 
-    public float attackDistanceOffset = 1.5f;
-
     private UnitData activePlayerUnitData;
     private UnitData activeEnemyUnitData;
     private int currentPlayerHealth;
@@ -25,8 +23,9 @@ public class CombatManager : MonoBehaviour
 
     private GameObject activePlayerInstance;
     private GameObject activeEnemyInstance;
-    private PlayerController spawnedPlayerController;
-    private EnemyController spawnedEnemyController;
+
+    private BattleUnit playerBattleUnit;
+    private BattleUnit enemyBattleUnit;
 
     public void InitializeDynamicCombatSequence(UnitData playerData, UnitData enemyData)
     {
@@ -47,14 +46,26 @@ public class CombatManager : MonoBehaviour
     private void SpawnCombatants()
     {
         activePlayerInstance = Instantiate(activePlayerUnitData.unitPrefab, playerSpawnPoint.position, playerSpawnPoint.rotation);
-        spawnedPlayerController = activePlayerInstance.GetComponent<PlayerController>();
-        if (spawnedPlayerController != null)
+
+        PlayerController cloneController = activePlayerInstance.GetComponent<PlayerController>();
+        if (cloneController != null)
         {
-            spawnedPlayerController.SetMovementState(false);
+            Destroy(cloneController);
+        }
+
+        playerBattleUnit = activePlayerInstance.GetComponent<BattleUnit>();
+        if (playerBattleUnit != null)
+        {
+            playerBattleUnit.SetupForCombat();
         }
 
         activeEnemyInstance = Instantiate(activeEnemyUnitData.unitPrefab, enemySpawnPoint.position, enemySpawnPoint.rotation);
-        spawnedEnemyController = activeEnemyInstance.GetComponent<EnemyController>();
+
+        enemyBattleUnit = activeEnemyInstance.GetComponent<BattleUnit>();
+        if (enemyBattleUnit != null)
+        {
+            enemyBattleUnit.SetupForCombat();
+        }
     }
 
     private void ConfigureCameras()
@@ -73,13 +84,7 @@ public class CombatManager : MonoBehaviour
         vcamBattleMain.SetActive(false);
         vcamAction.SetActive(true);
 
-        spawnedPlayerController.ExecuteMeleeAttack(
-            activeEnemyInstance.transform,
-            attackDistanceOffset,
-            8f,
-            OnPlayerHitTarget,
-            OnPlayerReturnToSpawn
-        );
+        playerBattleUnit.PerformAction(activePlayerUnitData.defaultAttack, activeEnemyInstance.transform, OnPlayerHitTarget, OnPlayerReturnToSpawn);
     }
 
     private void OnPlayerHitTarget()
@@ -102,12 +107,7 @@ public class CombatManager : MonoBehaviour
         vcamBattleMain.SetActive(false);
         vcamAction.SetActive(true);
 
-        spawnedEnemyController.ExecuteMeleeAttack(
-            activePlayerInstance.transform,
-            attackDistanceOffset,
-            OnEnemyHitTarget,
-            OnEnemyReturnToSpawn
-        );
+        enemyBattleUnit.PerformAction(activeEnemyUnitData.defaultAttack, activePlayerInstance.transform, OnEnemyHitTarget, OnEnemyReturnToSpawn);
     }
 
     private void OnEnemyHitTarget()

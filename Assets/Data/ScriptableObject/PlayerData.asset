@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e29f710be2ac9b41a96795b597667fb, type: 3}
-  m_Name: Goblin
+  m_Name: PlayerData
   m_EditorClassIdentifier: Assembly-CSharp::UnitData
-  unitName: Goblin
-  maxHealth: 50
-  attackPower: 10
-  unitPrefab: {fileID: 9064375099136681914, guid: 771182019f65fff49adecbfe5b5be25a, type: 3}
+  unitName: Player
+  maxHealth: 100
+  attackPower: 25
+  unitPrefab: {fileID: 9131100254173095420, guid: 37a9aae3756a2b2488fca007473bb3be, type: 3}
+  defaultAttack: {fileID: 11400000, guid: 3d1a78089b52c1a4ab7226b0abbceee3, type: 2}

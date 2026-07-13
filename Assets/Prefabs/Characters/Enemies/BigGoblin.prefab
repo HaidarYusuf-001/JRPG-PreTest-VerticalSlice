@@ -352,7 +352,7 @@ Animator:
   m_GameObject: {fileID: 826964799408241323}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: efd331d4b11709f40b82377af7a18459, type: 3}
-  m_Controller: {fileID: 9100000, guid: fdfa61d1703a5ec40b675c77285a07f4, type: 2}
+  m_Controller: {fileID: 9100000, guid: 7b6e782a83a178b43aaf0a8a7ae4efb3, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -789,6 +789,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9111121296460796164}
+  - component: {fileID: -8313419350847019005}
   m_Layer: 0
   m_Name: BigGoblin
   m_TagString: Untagged
@@ -812,6 +813,20 @@ Transform:
   - {fileID: 8167369750541839965}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-8313419350847019005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3466882382871926099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03b9931d27a13e642b3fad044a194f42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BattleUnit
+  actionMovementSpeed: 4
+  attackDistanceOffset: 1.5
 --- !u!1 &4045972007446468166
 GameObject:
   m_ObjectHideFlags: 0

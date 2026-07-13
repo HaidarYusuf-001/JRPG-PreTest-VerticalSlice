@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4824955470614486334}
+  - component: {fileID: -971610788522759159}
   m_Layer: 0
   m_Name: GiganticGoblin
   m_TagString: Untagged
@@ -32,6 +33,20 @@ Transform:
   - {fileID: 3733990272557122359}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-971610788522759159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 18729460428243317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03b9931d27a13e642b3fad044a194f42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BattleUnit
+  actionMovementSpeed: 2
+  attackDistanceOffset: 1.5
 --- !u!1 &288474512008630892
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,7 +441,6 @@ GameObject:
   - component: {fileID: 3733990272557122359}
   - component: {fileID: 423483905811400988}
   - component: {fileID: 6986575889042144083}
-  - component: {fileID: 3452511231168563044}
   m_Layer: 0
   m_Name: GiganticGoblin
   m_TagString: Untagged
@@ -462,7 +476,7 @@ Animator:
   m_GameObject: {fileID: 5154824204086976096}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: efd331d4b11709f40b82377af7a18459, type: 3}
-  m_Controller: {fileID: 9100000, guid: fdfa61d1703a5ec40b675c77285a07f4, type: 2}
+  m_Controller: {fileID: 9100000, guid: 6eb527cfbf37821459ddd139d83cd186, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -497,19 +511,6 @@ CapsuleCollider:
   m_Height: 1.8730727
   m_Direction: 1
   m_Center: {x: -0.04972589, y: 0.76, z: 0}
---- !u!114 &3452511231168563044
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5154824204086976096}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2845978406587a949818e77dc80a0f4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyController
-  actionMovementSpeed: 8
 --- !u!1 &5250448259157198644
 GameObject:
   m_ObjectHideFlags: 0

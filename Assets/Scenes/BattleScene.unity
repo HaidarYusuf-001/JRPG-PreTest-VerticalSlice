@@ -1679,7 +1679,6 @@ MonoBehaviour:
   enemySpawnPoint: {fileID: 174186132}
   vcamBattleMain: {fileID: 1779632287}
   vcamAction: {fileID: 738951888}
-  attackDistanceOffset: 1.5
 --- !u!4 &1953620773
 Transform:
   m_ObjectHideFlags: 0

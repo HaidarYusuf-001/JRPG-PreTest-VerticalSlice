@@ -867,11 +867,11 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: f7cf8d11d46290c44adc63cf68422775, type: 2}
     - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
       propertyPath: encounterPool.Array.data[0].encounterPercentage
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
       propertyPath: encounterPool.Array.data[1].encounterPercentage
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5243034465698612646, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
       propertyPath: m_LocalScale.x
@@ -1291,11 +1291,11 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 512e9317436e3fe4785cffc8919e7de7, type: 2}
     - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
       propertyPath: encounterPool.Array.data[0].encounterPercentage
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
       propertyPath: encounterPool.Array.data[1].encounterPercentage
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 5243034465698612646, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
       propertyPath: m_LocalScale.x

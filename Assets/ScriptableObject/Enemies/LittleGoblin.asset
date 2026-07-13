@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e29f710be2ac9b41a96795b597667fb, type: 3}
-  m_Name: EnemyData
+  m_Name: LittleGoblin
   m_EditorClassIdentifier: Assembly-CSharp::UnitData
-  unitName: Goblin
-  maxHealth: 50
-  attackPower: 10
-  unitPrefab: {fileID: 163161937867053704, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
+  unitName: Little Goblin
+  maxHealth: 25
+  attackPower: 5
+  unitPrefab: {fileID: 704456876496455557, guid: 77378b372f9186b458678379d99bc098, type: 3}

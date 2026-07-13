@@ -11958,6 +11958,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5243034465698612646}
+  - component: {fileID: 7197013547119770895}
+  - component: {fileID: 3382694807607813134}
   m_Layer: 0
   m_Name: Grasses
   m_TagString: Untagged
@@ -12160,6 +12162,40 @@ Transform:
   - {fileID: 3598294876292572604}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7197013547119770895
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1460540195838443859}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 8.497476, y: 0.65674967, z: 13.217958}
+  m_Center: {x: 0.083975315, y: 0.17162517, z: 6.108979}
+--- !u!114 &3382694807607813134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1460540195838443859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dba386a1a1c8e04aba838b82dc14037, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EncounterArea
+  possibleEnemies: []
 --- !u!1 &1465350282783725958
 GameObject:
   m_ObjectHideFlags: 0

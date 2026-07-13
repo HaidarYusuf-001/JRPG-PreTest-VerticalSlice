@@ -28,7 +28,8 @@ public class GameFlowManager : MonoBehaviour
 
     private CinemachineCamera cinemachineDialogCamera;
     private GameState currentGameState;
-    private UnitData currentTargetEnemyData;
+    private UnitData pendingEnemyData;
+    private bool isRandomEncounter = false;
 
     private void Awake()
     {
@@ -85,7 +86,7 @@ public class GameFlowManager : MonoBehaviour
 
     public void SetCurrentEnemyData(UnitData enemyData)
     {
-        currentTargetEnemyData = enemyData;
+        pendingEnemyData = enemyData;
     }
 
     public void TriggerDialogSequence(NPCController activeNPC)
@@ -101,8 +102,17 @@ public class GameFlowManager : MonoBehaviour
         vcamExplorationDialog.SetActive(true);
     }
 
-    public void TriggerBattleSequence()
+    public void TriggerNPCBattle()
     {
+        isRandomEncounter = false;
+        ChangeGameState(GameState.Combat);
+        StartCoroutine(LoadBattleSceneAdditive());
+    }
+
+    public void TriggerRandomEncounter(UnitData enemyData)
+    {
+        isRandomEncounter = true;
+        pendingEnemyData = enemyData;
         ChangeGameState(GameState.Combat);
         StartCoroutine(LoadBattleSceneAdditive());
     }
@@ -119,7 +129,7 @@ public class GameFlowManager : MonoBehaviour
 
         CombatManager activeCombatManager = Object.FindAnyObjectByType<CombatManager>();
         activeCombatManager.OnCombatCompleted += HandleCombatCompletion;
-        activeCombatManager.InitializeDynamicCombatSequence(playerUnitData, currentTargetEnemyData);
+        activeCombatManager.InitializeDynamicCombatSequence(playerUnitData, pendingEnemyData);
     }
 
     private void HandleCombatCompletion()
@@ -137,8 +147,16 @@ public class GameFlowManager : MonoBehaviour
         }
 
         explorationMainCamera.gameObject.SetActive(true);
-        ChangeGameState(GameState.Dialog);
-        Flowchart.BroadcastFungusMessage("BattleEnded");
+
+        if (isRandomEncounter)
+        {
+            ChangeGameState(GameState.Exploration);
+        }
+        else
+        {
+            ChangeGameState(GameState.Dialog);
+            Flowchart.BroadcastFungusMessage("BattleEnded");
+        }
     }
 
     public void TriggerPostBattleCutscene()

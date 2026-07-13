@@ -16,7 +16,6 @@ public class CombatManager : MonoBehaviour
     public GameObject vcamBattleMain;
     public GameObject vcamAction;
 
-    public float actionMovementSpeed = 8f;
     public float attackDistanceOffset = 1.5f;
 
     private UnitData activePlayerUnitData;
@@ -26,6 +25,8 @@ public class CombatManager : MonoBehaviour
 
     private GameObject activePlayerInstance;
     private GameObject activeEnemyInstance;
+    private PlayerController spawnedPlayerController;
+    private EnemyController spawnedEnemyController;
 
     public void InitializeDynamicCombatSequence(UnitData playerData, UnitData enemyData)
     {
@@ -46,7 +47,14 @@ public class CombatManager : MonoBehaviour
     private void SpawnCombatants()
     {
         activePlayerInstance = Instantiate(activePlayerUnitData.unitPrefab, playerSpawnPoint.position, playerSpawnPoint.rotation);
+        spawnedPlayerController = activePlayerInstance.GetComponent<PlayerController>();
+        if (spawnedPlayerController != null)
+        {
+            spawnedPlayerController.SetMovementState(false);
+        }
+
         activeEnemyInstance = Instantiate(activeEnemyUnitData.unitPrefab, enemySpawnPoint.position, enemySpawnPoint.rotation);
+        spawnedEnemyController = activeEnemyInstance.GetComponent<EnemyController>();
     }
 
     private void ConfigureCameras()
@@ -62,71 +70,57 @@ public class CombatManager : MonoBehaviour
 
     public void ProcessPlayerTurn()
     {
-        StartCoroutine(ExecuteActionSequence(activePlayerInstance, activeEnemyInstance, true));
+        vcamBattleMain.SetActive(false);
+        vcamAction.SetActive(true);
+
+        spawnedPlayerController.ExecuteMeleeAttack(
+            activeEnemyInstance.transform,
+            attackDistanceOffset,
+            8f,
+            OnPlayerHitTarget,
+            OnPlayerReturnToSpawn
+        );
     }
 
-    private IEnumerator ExecuteEnemyTurn()
+    private void OnPlayerHitTarget()
+    {
+        currentEnemyHealth -= activePlayerUnitData.attackPower;
+        battleUIManager.UpdateEnemyHealth(currentEnemyHealth);
+    }
+
+    private void OnPlayerReturnToSpawn()
+    {
+        vcamAction.SetActive(false);
+        vcamBattleMain.SetActive(true);
+        CheckCombatState(true);
+    }
+
+    private IEnumerator ProcessEnemyTurn()
     {
         yield return new WaitForSeconds(0.5f);
-        StartCoroutine(ExecuteActionSequence(activeEnemyInstance, activePlayerInstance, false));
-    }
-
-    private IEnumerator ExecuteActionSequence(GameObject attacker, GameObject target, bool isPlayerTurn)
-    {
-        Vector3 startPosition = attacker.transform.position;
-        Vector3 directionToTarget = (target.transform.position - attacker.transform.position).normalized;
-        Vector3 targetPosition = target.transform.position - (directionToTarget * attackDistanceOffset);
 
         vcamBattleMain.SetActive(false);
         vcamAction.SetActive(true);
 
-        Animator attackerAnimator = attacker.GetComponent<Animator>();
-        if (attackerAnimator != null) attackerAnimator.SetBool("isWalking", true);
+        spawnedEnemyController.ExecuteMeleeAttack(
+            activePlayerInstance.transform,
+            attackDistanceOffset,
+            OnEnemyHitTarget,
+            OnEnemyReturnToSpawn
+        );
+    }
 
-        while (Vector3.Distance(attacker.transform.position, targetPosition) > 0.1f)
-        {
-            attacker.transform.position = Vector3.MoveTowards(attacker.transform.position, targetPosition, actionMovementSpeed * Time.deltaTime);
-            yield return null;
-        }
+    private void OnEnemyHitTarget()
+    {
+        currentPlayerHealth -= activeEnemyUnitData.attackPower;
+        battleUIManager.UpdatePlayerHealth(currentPlayerHealth);
+    }
 
-        if (attackerAnimator != null) attackerAnimator.SetBool("isWalking", false);
-        yield return new WaitForSeconds(0.5f);
-
-        if (isPlayerTurn)
-        {
-            currentEnemyHealth -= activePlayerUnitData.attackPower;
-            battleUIManager.UpdateEnemyHealth(currentEnemyHealth);
-        }
-        else
-        {
-            currentPlayerHealth -= activeEnemyUnitData.attackPower;
-            battleUIManager.UpdatePlayerHealth(currentPlayerHealth);
-        }
-
-        yield return new WaitForSeconds(0.5f);
-
+    private void OnEnemyReturnToSpawn()
+    {
         vcamAction.SetActive(false);
         vcamBattleMain.SetActive(true);
-
-        if (attackerAnimator != null) attackerAnimator.SetBool("isWalking", true);
-
-        Vector3 directionBack = (startPosition - attacker.transform.position).normalized;
-        if (directionBack != Vector3.zero)
-        {
-            attacker.transform.rotation = Quaternion.LookRotation(directionBack);
-        }
-
-        while (Vector3.Distance(attacker.transform.position, startPosition) > 0.1f)
-        {
-            attacker.transform.position = Vector3.MoveTowards(attacker.transform.position, startPosition, actionMovementSpeed * Time.deltaTime);
-            yield return null;
-        }
-
-        if (attackerAnimator != null) attackerAnimator.SetBool("isWalking", false);
-        attacker.transform.rotation = isPlayerTurn ? playerSpawnPoint.rotation : enemySpawnPoint.rotation;
-
-        yield return new WaitForSeconds(0.5f);
-        CheckCombatState(isPlayerTurn);
+        CheckCombatState(false);
     }
 
     private void CheckCombatState(bool wasPlayerTurn)
@@ -139,7 +133,7 @@ public class CombatManager : MonoBehaviour
             }
             else
             {
-                StartCoroutine(ExecuteEnemyTurn());
+                StartCoroutine(ProcessEnemyTurn());
             }
         }
         else

@@ -343,8 +343,9 @@ MonoBehaviour:
     width: 1114
     height: 859
   selectedBlocks:
-  - {fileID: 100739398}
-  selectedCommands: []
+  - {fileID: 100739404}
+  selectedCommands:
+  - {fileID: 100739403}
   variables: []
   description: 
   stepPause: 0
@@ -376,8 +377,8 @@ MonoBehaviour:
     Culture=neutral, PublicKeyToken=null
   targetComponentFullname: 'UnityEngine.Component[]'
   targetComponentText: GameFlowManager
-  targetMethod: TriggerBattleSequence
-  targetMethodText: 'TriggerBattleSequence (): Void'
+  targetMethod: TriggerNPCBattle
+  targetMethodText: 'TriggerNPCBattle (): Void'
   methodParameters: []
   saveReturnValue: 0
   returnValueVariableKey: 
@@ -844,6 +845,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grasses (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
+      propertyPath: encounterPool.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
+      propertyPath: possibleEnemies.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
+      propertyPath: 'possibleEnemies.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 512e9317436e3fe4785cffc8919e7de7, type: 2}
+    - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
+      propertyPath: encounterPool.Array.data[0].enemyData
+      value: 
+      objectReference: {fileID: 11400000, guid: 05d422301f43fb540bdbd382471eb691, type: 2}
+    - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
+      propertyPath: encounterPool.Array.data[1].enemyData
+      value: 
+      objectReference: {fileID: 11400000, guid: f7cf8d11d46290c44adc63cf68422775, type: 2}
+    - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
+      propertyPath: encounterPool.Array.data[0].encounterPercentage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
+      propertyPath: encounterPool.Array.data[1].encounterPercentage
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 5243034465698612646, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.41
@@ -1239,6 +1268,34 @@ PrefabInstance:
     - target: {fileID: 1460540195838443859, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
       propertyPath: m_Name
       value: Grasses
+      objectReference: {fileID: 0}
+    - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
+      propertyPath: encounterPool.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
+      propertyPath: possibleEnemies.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
+      propertyPath: 'possibleEnemies.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 512e9317436e3fe4785cffc8919e7de7, type: 2}
+    - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
+      propertyPath: encounterPool.Array.data[0].enemyData
+      value: 
+      objectReference: {fileID: 11400000, guid: 5b83f3dff36c4a34ba8fc9841e3f3e2c, type: 2}
+    - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
+      propertyPath: encounterPool.Array.data[1].enemyData
+      value: 
+      objectReference: {fileID: 11400000, guid: 512e9317436e3fe4785cffc8919e7de7, type: 2}
+    - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
+      propertyPath: encounterPool.Array.data[0].encounterPercentage
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
+      propertyPath: encounterPool.Array.data[1].encounterPercentage
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5243034465698612646, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
       propertyPath: m_LocalScale.x

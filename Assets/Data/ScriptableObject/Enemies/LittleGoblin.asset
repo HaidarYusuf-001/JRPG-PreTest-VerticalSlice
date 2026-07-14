@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LittleGoblin
   m_EditorClassIdentifier: Assembly-CSharp::UnitData
   unitName: Little Goblin
-  maxHealth: 100
+  maxHealth: 25
   attackPower: 5
   unitPrefab: {fileID: 704456876496455557, guid: 77378b372f9186b458678379d99bc098, type: 3}
   defaultAttack: {fileID: 11400000, guid: 3d1a78089b52c1a4ab7226b0abbceee3, type: 2}

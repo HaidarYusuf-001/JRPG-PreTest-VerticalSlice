@@ -21,6 +21,9 @@ public class PlayerController : MonoBehaviour
     private float currentStepDistance = 0f;
     private EncounterArea currentEncounterArea;
 
+    private Action onAutoMoveComplete;
+    private bool restoreMoveAfterAuto;
+
     private void Update()
     {
         if (isAutoMoving && autoMoveTarget != null)
@@ -98,11 +101,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void TriggerAutoMovement(Transform targetTransform)
+    public void TriggerAutoMovement(Transform targetTransform, bool restoreMovement = true, Action onComplete = null)
     {
         canMove = false;
         isAutoMoving = true;
         autoMoveTarget = targetTransform;
+        restoreMoveAfterAuto = restoreMovement;
+        onAutoMoveComplete = onComplete;
     }
 
     private void ExecuteAutoMovement()
@@ -123,8 +128,12 @@ public class PlayerController : MonoBehaviour
         else
         {
             isAutoMoving = false;
-            canMove = true;
+
             if (animator != null) animator.SetBool("isWalking", false);
+            if (restoreMoveAfterAuto) canMove = true;
+
+            onAutoMoveComplete?.Invoke();
+            onAutoMoveComplete = null;
         }
     }
 

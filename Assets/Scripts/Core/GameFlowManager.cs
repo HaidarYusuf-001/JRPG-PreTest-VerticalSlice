@@ -24,12 +24,11 @@ public class GameFlowManager : MonoBehaviour
     public UnitData playerUnitData;
 
     public GameObject vcamExplorationFollow;
-    public GameObject vcamExplorationDialog;
 
-    private CinemachineCamera cinemachineDialogCamera;
     private GameState currentGameState;
     private UnitData pendingEnemyData;
     private bool isRandomEncounter = false;
+    private NPCController activeDialogNPC;
 
     private void Awake()
     {
@@ -45,7 +44,6 @@ public class GameFlowManager : MonoBehaviour
 
     private void Start()
     {
-        cinemachineDialogCamera = vcamExplorationDialog.GetComponent<CinemachineCamera>();
         ChangeGameState(GameState.Exploration);
     }
 
@@ -62,7 +60,6 @@ public class GameFlowManager : MonoBehaviour
             case GameState.Exploration:
                 mainPlayerController.SetMovementState(true);
                 vcamExplorationFollow.SetActive(true);
-                vcamExplorationDialog.SetActive(false);
 
                 NPCController activeNPC = mainPlayerController.GetCurrentNPC();
                 if (activeNPC != null)
@@ -84,22 +81,30 @@ public class GameFlowManager : MonoBehaviour
         }
     }
 
-    public void SetCurrentEnemyData(UnitData enemyData)
+    public void StartNPCInteraction(NPCController npc)
     {
-        pendingEnemyData = enemyData;
+        activeDialogNPC = npc;
+        pendingEnemyData = npc.npcUnitData;
+        ChangeGameState(GameState.Cutscene);
+
+        SetDialogCamera(1);
+
+        mainPlayerController.TriggerAutoMovement(npc.standMark, false, () =>
+        {
+            ChangeGameState(GameState.Dialog);
+            npc.dialogFlowchart.ExecuteBlock(npc.targetBlockName);
+        });
     }
 
-    public void TriggerDialogSequence(NPCController activeNPC)
+    public void SetDialogCamera(int shotIndex)
     {
-        ChangeGameState(GameState.Dialog);
-        vcamExplorationFollow.SetActive(false);
+        if (activeDialogNPC == null) return;
 
-        if (cinemachineDialogCamera != null)
-        {
-            cinemachineDialogCamera.LookAt = activeNPC.dialogLookAtPoint;
-        }
+        activeDialogNPC.vcamShot1Wide.SetActive(shotIndex == 1);
+        activeDialogNPC.vcamShot2NPC.SetActive(shotIndex == 2);
+        activeDialogNPC.vcamShot3Player.SetActive(shotIndex == 3);
 
-        vcamExplorationDialog.SetActive(true);
+        vcamExplorationFollow.SetActive(shotIndex == 0);
     }
 
     public void TriggerNPCBattle()
@@ -162,8 +167,7 @@ public class GameFlowManager : MonoBehaviour
     public void TriggerPostBattleCutscene()
     {
         ChangeGameState(GameState.Cutscene);
-        vcamExplorationDialog.SetActive(false);
-        vcamExplorationFollow.SetActive(true);
+        SetDialogCamera(0);
 
         if (postBattleCutsceneDirector != null)
         {
@@ -171,13 +175,13 @@ public class GameFlowManager : MonoBehaviour
         }
 
         mainPlayerController.SetTalkingState(true);
-        Invoke("TriggerPlayerAutoMovement", 0.5f);
+        Invoke("ExecuteWalkOutLogic", 0.5f);
     }
 
-    private void TriggerPlayerAutoMovement()
+    private void ExecuteWalkOutLogic()
     {
         mainPlayerController.SetTalkingState(false);
-        mainPlayerController.TriggerAutoMovement(postBattleMovementTarget);
+        mainPlayerController.TriggerAutoMovement(postBattleMovementTarget, true, null);
     }
 
     public void RestoreExplorationState()

@@ -5,9 +5,13 @@ public class NPCController : MonoBehaviour
 {
     public Flowchart dialogFlowchart;
     public string targetBlockName;
-    public Transform dialogLookAtPoint;
     public CanvasGroup promptCanvasGroup;
     public UnitData npcUnitData;
+
+    public Transform standMark;
+    public GameObject vcamShot1Wide;
+    public GameObject vcamShot2NPC;
+    public GameObject vcamShot3Player;
 
     private void Start()
     {
@@ -33,11 +37,8 @@ public class NPCController : MonoBehaviour
 
             if (GameFlowManager.Instance != null)
             {
-                GameFlowManager.Instance.SetCurrentEnemyData(npcUnitData);
-                GameFlowManager.Instance.TriggerDialogSequence(this);
+                GameFlowManager.Instance.StartNPCInteraction(this);
             }
-
-            dialogFlowchart.ExecuteBlock(targetBlockName);
         }
     }
 }

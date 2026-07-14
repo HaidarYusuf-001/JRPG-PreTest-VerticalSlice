@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
@@ -164,9 +165,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void ExecuteHappyAnimation()
+    public void SetTalkingState(bool state)
     {
-        if (animator != null) animator.SetTrigger("happyTrigger");
+        if (animator != null) animator.SetBool("isTalking", state);
     }
 
     public void SetMovementState(bool state)

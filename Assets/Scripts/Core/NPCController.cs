@@ -7,6 +7,7 @@ public class NPCController : MonoBehaviour
     public string targetBlockName;
     public Transform dialogLookAtPoint;
     public CanvasGroup promptCanvasGroup;
+    public UnitData npcUnitData;
 
     private void Start()
     {
@@ -29,7 +30,13 @@ public class NPCController : MonoBehaviour
         if (dialogFlowchart != null && !dialogFlowchart.HasExecutingBlocks())
         {
             SetPromptVisibility(false);
-            GameFlowManager.Instance.TriggerDialogSequence(this);
+
+            if (GameFlowManager.Instance != null)
+            {
+                GameFlowManager.Instance.SetCurrentEnemyData(npcUnitData);
+                GameFlowManager.Instance.TriggerDialogSequence(this);
+            }
+
             dialogFlowchart.ExecuteBlock(targetBlockName);
         }
     }

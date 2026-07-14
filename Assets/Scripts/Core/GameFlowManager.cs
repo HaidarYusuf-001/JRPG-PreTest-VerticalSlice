@@ -170,12 +170,13 @@ public class GameFlowManager : MonoBehaviour
             postBattleCutsceneDirector.Play();
         }
 
-        mainPlayerController.ExecuteHappyAnimation();
+        mainPlayerController.SetTalkingState(true);
         Invoke("TriggerPlayerAutoMovement", 0.5f);
     }
 
     private void TriggerPlayerAutoMovement()
     {
+        mainPlayerController.SetTalkingState(false);
         mainPlayerController.TriggerAutoMovement(postBattleMovementTarget);
     }
 

@@ -389,7 +389,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: efd331d4b11709f40b82377af7a18459, type: 3}
       propertyPath: m_Name
-      value: NPC
+      value: NPC_001
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: efd331d4b11709f40b82377af7a18459, type: 3}
       propertyPath: m_Controller
@@ -428,6 +428,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: efd331d4b11709f40b82377af7a18459, type: 3}
       insertIndex: -1
       addedObject: {fileID: -8789460195759659218}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: efd331d4b11709f40b82377af7a18459, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1052112676524982744}
   m_SourcePrefab: {fileID: 100100000, guid: efd331d4b11709f40b82377af7a18459, type: 3}
 --- !u!1 &163161937867053704 stripped
 GameObject:
@@ -469,8 +472,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCController
   dialogFlowchart: {fileID: 0}
   targetBlockName: 
-  npcUnitData: {fileID: 11400000, guid: 512e9317436e3fe4785cffc8919e7de7, type: 2}
-  activeFlowManager: {fileID: 0}
   dialogLookAtPoint: {fileID: 8967809066569396908}
   promptCanvasGroup: {fileID: 254140483062421024}
 --- !u!114 &-1442323304078185328
@@ -539,6 +540,18 @@ CapsuleCollider:
   m_Height: 1.8730727
   m_Direction: 1
   m_Center: {x: -0.04972589, y: 0.76, z: 0}
+--- !u!114 &1052112676524982744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163161937867053704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03b9931d27a13e642b3fad044a194f42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BattleUnit
 --- !u!4 &650904594097782834 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: efd331d4b11709f40b82377af7a18459, type: 3}

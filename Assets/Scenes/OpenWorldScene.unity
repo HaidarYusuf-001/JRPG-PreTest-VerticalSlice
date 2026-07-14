@@ -305,12 +305,22 @@ GameObject:
   - component: {fileID: 100739402}
   - component: {fileID: 100739396}
   - component: {fileID: 100739398}
-  - component: {fileID: 100739399}
-  - component: {fileID: 100739397}
   - component: {fileID: 100739404}
   - component: {fileID: 100739406}
   - component: {fileID: 100739405}
   - component: {fileID: 100739403}
+  - component: {fileID: 100739418}
+  - component: {fileID: 100739417}
+  - component: {fileID: 100739416}
+  - component: {fileID: 100739415}
+  - component: {fileID: 100739414}
+  - component: {fileID: 100739413}
+  - component: {fileID: 100739412}
+  - component: {fileID: 100739411}
+  - component: {fileID: 100739410}
+  - component: {fileID: 100739409}
+  - component: {fileID: 100739408}
+  - component: {fileID: 100739407}
   m_Layer: 0
   m_Name: Flowchart
   m_TagString: Untagged
@@ -331,21 +341,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: 103.19253, y: 125.46388}
+  scrollPos: {x: 62.172653, y: 108.80648}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
   blockViewHeight: 226.66669
-  zoom: 0.8200002
+  zoom: 0.8800001
   scrollViewRect:
     serializedVersion: 2
     x: -343
     y: -340
     width: 1114
     height: 859
-  selectedBlocks:
-  - {fileID: 100739404}
-  selectedCommands:
-  - {fileID: 100739403}
+  selectedBlocks: []
+  selectedCommands: []
   variables: []
   description: 
   stepPause: 0
@@ -357,34 +365,6 @@ MonoBehaviour:
   hideCommands: []
   luaEnvironment: {fileID: 0}
   luaBindingName: flowchart
---- !u!114 &100739397
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100739395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 688e35811870d403f9e2b1ab2a699d98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.InvokeMethod
-  itemId: 3
-  indentLevel: 0
-  description: 
-  targetObject: {fileID: 1760888878}
-  targetComponentAssemblyName: GameFlowManager, Assembly-CSharp, Version=0.0.0.0,
-    Culture=neutral, PublicKeyToken=null
-  targetComponentFullname: 'UnityEngine.Component[]'
-  targetComponentText: GameFlowManager
-  targetMethod: TriggerNPCBattle
-  targetMethodText: 'TriggerNPCBattle (): Void'
-  methodParameters: []
-  saveReturnValue: 0
-  returnValueVariableKey: 
-  returnValueType: System.Void
-  showInherited: 0
-  callMode: 0
 --- !u!114 &100739398
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -410,36 +390,14 @@ MonoBehaviour:
   description: 
   eventHandler: {fileID: 0}
   commandList:
-  - {fileID: 100739399}
-  - {fileID: 100739397}
+  - {fileID: 100739418}
+  - {fileID: 100739417}
+  - {fileID: 100739414}
+  - {fileID: 100739416}
+  - {fileID: 100739415}
+  - {fileID: 100739413}
+  - {fileID: 100739412}
   suppressAllAutoSelections: 0
---- !u!114 &100739399
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100739395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fungus::Fungus.Say
-  itemId: 2
-  indentLevel: 0
-  storyText: Hi, lets fight!
-  description: 
-  character: {fileID: 461845092950557435}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  setSayDialog: {fileID: 1062351233}
 --- !u!4 &100739402
 Transform:
   m_ObjectHideFlags: 0
@@ -508,7 +466,12 @@ MonoBehaviour:
   description: 
   eventHandler: {fileID: 100739406}
   commandList:
+  - {fileID: 100739409}
+  - {fileID: 100739407}
+  - {fileID: 100739408}
+  - {fileID: 100739411}
   - {fileID: 100739405}
+  - {fileID: 100739410}
   - {fileID: 100739403}
   suppressAllAutoSelections: 0
 --- !u!114 &100739405
@@ -553,6 +516,315 @@ MonoBehaviour:
   parentBlock: {fileID: 100739404}
   suppressBlockAutoSelect: 0
   message: BattleEnded
+--- !u!114 &100739407
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100739395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fungus::Fungus.Say
+  itemId: 18
+  indentLevel: 0
+  storyText: You don't say, you are pretty strong.
+  description: 
+  character: {fileID: 461845092950557435}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 1
+  waitForClick: 1
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 1062351233}
+--- !u!114 &100739408
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100739395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee63e642958494f1ebed8116ae4b1103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fungus::Fungus.SetAnimBool
+  itemId: 17
+  indentLevel: 0
+  _animator:
+    animatorRef: {fileID: 0}
+    animatorVal: {fileID: 461845092950557439}
+  _parameterName:
+    stringRef: {fileID: 0}
+    stringVal: isTalking
+  value:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  animatorOLD: {fileID: 0}
+  parameterNameOLD: 
+--- !u!114 &100739409
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100739395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee63e642958494f1ebed8116ae4b1103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fungus::Fungus.SetAnimBool
+  itemId: 16
+  indentLevel: 0
+  _animator:
+    animatorRef: {fileID: 0}
+    animatorVal: {fileID: 461845092950557439}
+  _parameterName:
+    stringRef: {fileID: 0}
+    stringVal: isTalking
+  value:
+    booleanRef: {fileID: 0}
+    booleanVal: 1
+  animatorOLD: {fileID: 0}
+  parameterNameOLD: 
+--- !u!114 &100739410
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100739395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee63e642958494f1ebed8116ae4b1103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fungus::Fungus.SetAnimBool
+  itemId: 15
+  indentLevel: 0
+  _animator:
+    animatorRef: {fileID: 0}
+    animatorVal: {fileID: 1303262595}
+  _parameterName:
+    stringRef: {fileID: 0}
+    stringVal: isTalking
+  value:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  animatorOLD: {fileID: 0}
+  parameterNameOLD: 
+--- !u!114 &100739411
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100739395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee63e642958494f1ebed8116ae4b1103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fungus::Fungus.SetAnimBool
+  itemId: 14
+  indentLevel: 0
+  _animator:
+    animatorRef: {fileID: 0}
+    animatorVal: {fileID: 1303262595}
+  _parameterName:
+    stringRef: {fileID: 0}
+    stringVal: isTalking
+  value:
+    booleanRef: {fileID: 0}
+    booleanVal: 1
+  animatorOLD: {fileID: 0}
+  parameterNameOLD: 
+--- !u!114 &100739412
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100739395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 688e35811870d403f9e2b1ab2a699d98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fungus::Fungus.InvokeMethod
+  itemId: 13
+  indentLevel: 0
+  description: 
+  targetObject: {fileID: 1760888878}
+  targetComponentAssemblyName: GameFlowManager, Assembly-CSharp, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  targetComponentFullname: 'UnityEngine.Component[]'
+  targetComponentText: GameFlowManager
+  targetMethod: TriggerNPCBattle
+  targetMethodText: 'TriggerNPCBattle (): Void'
+  methodParameters: []
+  saveReturnValue: 0
+  returnValueVariableKey: 
+  returnValueType: System.Void
+  showInherited: 0
+  callMode: 0
+--- !u!114 &100739413
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100739395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee63e642958494f1ebed8116ae4b1103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fungus::Fungus.SetAnimBool
+  itemId: 12
+  indentLevel: 0
+  _animator:
+    animatorRef: {fileID: 0}
+    animatorVal: {fileID: 1303262595}
+  _parameterName:
+    stringRef: {fileID: 0}
+    stringVal: isTalking
+  value:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  animatorOLD: {fileID: 0}
+  parameterNameOLD: 
+--- !u!114 &100739414
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100739395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee63e642958494f1ebed8116ae4b1103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fungus::Fungus.SetAnimBool
+  itemId: 11
+  indentLevel: 0
+  _animator:
+    animatorRef: {fileID: 0}
+    animatorVal: {fileID: 461845092950557439}
+  _parameterName:
+    stringRef: {fileID: 0}
+    stringVal: isTalking
+  value:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  animatorOLD: {fileID: 0}
+  parameterNameOLD: 
+--- !u!114 &100739415
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100739395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fungus::Fungus.Say
+  itemId: 10
+  indentLevel: 0
+  storyText: I'm ready when you are!
+  description: 
+  character: {fileID: 1303262596}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 1
+  waitForClick: 1
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 1062351233}
+--- !u!114 &100739416
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100739395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee63e642958494f1ebed8116ae4b1103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fungus::Fungus.SetAnimBool
+  itemId: 9
+  indentLevel: 0
+  _animator:
+    animatorRef: {fileID: 0}
+    animatorVal: {fileID: 1303262595}
+  _parameterName:
+    stringRef: {fileID: 0}
+    stringVal: isTalking
+  value:
+    booleanRef: {fileID: 0}
+    booleanVal: 1
+  animatorOLD: {fileID: 0}
+  parameterNameOLD: 
+--- !u!114 &100739417
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100739395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fungus::Fungus.Say
+  itemId: 8
+  indentLevel: 0
+  storyText: Hi, let's fight!
+  description: 
+  character: {fileID: 461845092950557435}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 1
+  waitForClick: 1
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 1062351233}
+--- !u!114 &100739418
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100739395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee63e642958494f1ebed8116ae4b1103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fungus::Fungus.SetAnimBool
+  itemId: 7
+  indentLevel: 0
+  _animator:
+    animatorRef: {fileID: 0}
+    animatorVal: {fileID: 461845092950557439}
+  _parameterName:
+    stringRef: {fileID: 0}
+    stringVal: isTalking
+  value:
+    booleanRef: {fileID: 0}
+    booleanVal: 1
+  animatorOLD: {fileID: 0}
+  parameterNameOLD: 
 --- !u!1 &125943365 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 615763826570830567, guid: 976c74ddd2bfc8046a537a926210a1ca, type: 3}
@@ -867,11 +1139,11 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: f7cf8d11d46290c44adc63cf68422775, type: 2}
     - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
       propertyPath: encounterPool.Array.data[0].encounterPercentage
-      value: 100
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
       propertyPath: encounterPool.Array.data[1].encounterPercentage
-      value: 0
+      value: 70
       objectReference: {fileID: 0}
     - target: {fileID: 5243034465698612646, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
       propertyPath: m_LocalScale.x
@@ -1291,11 +1563,11 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 512e9317436e3fe4785cffc8919e7de7, type: 2}
     - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
       propertyPath: encounterPool.Array.data[0].encounterPercentage
-      value: 0
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 3382694807607813134, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
       propertyPath: encounterPool.Array.data[1].encounterPercentage
-      value: 100
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 5243034465698612646, guid: 0b504b36c86693546976fb1f28ca4a49, type: 3}
       propertyPath: m_LocalScale.x

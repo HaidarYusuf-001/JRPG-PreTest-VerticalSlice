@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d4e74169d446be4daaece2443dd76ba, type: 3}
   m_Name: Rush
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: 
+  skillName: Rush
   manaCost: 20
-  power: 5
-  isHealing: 0
+  targetType: 1
+  effectCategory: 0
+  effectValue: 10
   actionExecution: {fileID: 11400000, guid: 3d1a78089b52c1a4ab7226b0abbceee3, type: 2}

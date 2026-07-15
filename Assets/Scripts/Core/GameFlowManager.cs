@@ -61,7 +61,8 @@ public class GameFlowManager : MonoBehaviour
             }
             else
             {
-                NPCController[] allNPCs = FindObjectsByType<NPCController>(FindObjectsSortMode.None);
+                // FIX: API Baru Unity pengganti FindObjectsSortMode
+                NPCController[] allNPCs = FindObjectsByType<NPCController>(FindObjectsInactive.Exclude);
                 foreach (NPCController npc in allNPCs)
                 {
                     if (npc.npcID == SessionManager.Instance.lastInteractedNpcID)

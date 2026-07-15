@@ -5,7 +5,12 @@ public class SkillData : ScriptableObject
 {
     public string skillName;
     public int manaCost;
-    public int power;
-    public bool isHealing;
+
+    [Header("Effect Settings")]
+    public ActionTarget targetType;
+    public EffectCategory effectCategory;
+    public int effectValue; 
+
+    [Header("Animation")]
     public CombatAction actionExecution;
 }

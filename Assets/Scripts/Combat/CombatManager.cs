@@ -1,19 +1,22 @@
 using UnityEngine;
 using System.Collections;
-using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
-using System;
+using Unity.Cinemachine;
 
 public class CombatManager : MonoBehaviour
 {
     public BattleUIManager battleUIManager;
-    public PlayableDirector battleEntryDirector;
 
     public Transform playerSpawnPoint;
     public Transform enemySpawnPoint;
+
+    [Header("Cinematic Action Cameras")]
     public GameObject vcamBattleMain;
-    public GameObject vcamAction;
-    public HealAction defaultItemAction;
+    public GameObject vcamActionMelee;
+    public GameObject vcamActionSelfPlayer;
+    public GameObject vcamActionSelfEnemy;
+    public GameObject vcamActionOpponentEnemy;
+    public GameObject vcamActionOpponentPlayer;
 
     private UnitData activePlayerUnitData;
     private UnitData activeEnemyUnitData;
@@ -24,11 +27,22 @@ public class CombatManager : MonoBehaviour
     private BattleUnit playerBattleUnit;
     private BattleUnit enemyBattleUnit;
 
-    private SkillData currentQueuedSkill;
-    private ItemConsumableData currentQueuedItem;
+    private ActionTarget currentTargetType;
+    private EffectCategory currentEffectCategory;
+    private int currentEffectValue;
+    private CombatAction currentActionExecution;
+
+    private CinemachineBrain cmBrain;
+    private CinemachineBlendDefinition originalBlend;
 
     private void Start()
     {
+        cmBrain = Object.FindAnyObjectByType<CinemachineBrain>();
+        if (cmBrain != null)
+        {
+            originalBlend = cmBrain.DefaultBlend;
+        }
+
         if (SessionManager.Instance != null)
         {
             InitializeDynamicCombatSequence(SessionManager.Instance.playerUnitData, SessionManager.Instance.pendingEnemyData);
@@ -42,12 +56,11 @@ public class CombatManager : MonoBehaviour
         currentEnemyHealth = activeEnemyUnitData.maxHealth;
 
         SpawnCombatants();
-        ConfigureCameras();
+        SwitchCamera(vcamBattleMain, false); 
 
         RefreshUIHUD();
         battleUIManager.InitializeUI(this);
-        battleEntryDirector.Play();
-        Invoke("StartFirstTurn", (float)battleEntryDirector.duration);
+        Invoke("StartFirstTurn", 1.5f);
     }
 
     private void SpawnCombatants()
@@ -60,12 +73,61 @@ public class CombatManager : MonoBehaviour
         activeEnemyInstance = Instantiate(activeEnemyUnitData.unitPrefab, enemySpawnPoint.position, enemySpawnPoint.rotation);
         enemyBattleUnit = activeEnemyInstance.GetComponent<BattleUnit>();
         enemyBattleUnit?.SetupForCombat();
+
+        AssignCinemachineTargets();
     }
 
-    private void ConfigureCameras()
+    private void AssignCinemachineTargets()
     {
-        vcamBattleMain.SetActive(true);
-        vcamAction.SetActive(false);
+        void SetCameraTarget(GameObject vcamObj, Transform target)
+        {
+            if (vcamObj != null && target != null)
+            {
+                CinemachineCamera cam = vcamObj.GetComponent<CinemachineCamera>();
+                if (cam != null)
+                {
+                    cam.LookAt = target;
+                    cam.Follow = target;
+                }
+            }
+        }
+
+        SetCameraTarget(vcamActionSelfPlayer, playerBattleUnit.cameraTrackTarget);
+        SetCameraTarget(vcamActionSelfEnemy, enemyBattleUnit.cameraTrackTarget);
+        SetCameraTarget(vcamActionOpponentEnemy, enemyBattleUnit.cameraTrackTarget);
+        SetCameraTarget(vcamActionOpponentPlayer, playerBattleUnit.cameraTrackTarget);
+    }
+
+    private void ResetAllCameras()
+    {
+        vcamBattleMain.SetActive(false);
+        vcamActionMelee.SetActive(false);
+        vcamActionSelfPlayer.SetActive(false);
+        vcamActionSelfEnemy.SetActive(false);
+        vcamActionOpponentEnemy.SetActive(false);
+        vcamActionOpponentPlayer.SetActive(false);
+    }
+
+    private void SwitchCamera(GameObject targetCam, bool forceCut)
+    {
+        ResetAllCameras();
+
+        if (forceCut && cmBrain != null)
+        {
+            cmBrain.DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.Cut, 0f);
+            StartCoroutine(RestoreCameraBlendCoroutine());
+        }
+
+        targetCam.SetActive(true);
+    }
+
+    private IEnumerator RestoreCameraBlendCoroutine()
+    {
+        yield return null;
+        if (cmBrain != null)
+        {
+            cmBrain.DefaultBlend = originalBlend;
+        }
     }
 
     private void RefreshUIHUD()
@@ -76,7 +138,8 @@ public class CombatManager : MonoBehaviour
             SessionManager.Instance.playerCurrentMP,
             SessionManager.Instance.playerMaxMP,
             currentEnemyHealth,
-            activeEnemyUnitData.maxHealth
+            activeEnemyUnitData.maxHealth,
+            activeEnemyUnitData.maxMana
         );
     }
 
@@ -86,11 +149,10 @@ public class CombatManager : MonoBehaviour
         battleUIManager.EnableInput();
     }
 
-    // --- BUTTON CALLBACKS ---
     public void ExecutePlayerAttack()
     {
         battleUIManager.DisableAllInput();
-        currentQueuedSkill = activePlayerUnitData.basicAttack;
+        QueueEffectExecution(activePlayerUnitData.basicAttack.targetType, activePlayerUnitData.basicAttack.effectCategory, activePlayerUnitData.basicAttack.effectValue, activePlayerUnitData.basicAttack.actionExecution);
         ExecuteTurnSequence(true);
     }
 
@@ -101,36 +163,31 @@ public class CombatManager : MonoBehaviour
             battleUIManager.ShowMessage("Not enough MP!");
             return;
         }
-
         SessionManager.Instance.playerCurrentMP -= skill.manaCost;
         RefreshUIHUD();
 
         battleUIManager.DisableAllInput();
         battleUIManager.ShowMainPanel();
-        currentQueuedSkill = skill;
+
+        QueueEffectExecution(skill.targetType, skill.effectCategory, skill.effectValue, skill.actionExecution);
         ExecuteTurnSequence(true);
     }
 
     public void ExecuteItem(InventorySlot slot)
     {
-        slot.quantity--;
-        if (slot.quantity <= 0) SessionManager.Instance.playerInventory.Remove(slot);
-
         battleUIManager.DisableAllInput();
         battleUIManager.ShowMainPanel();
-        currentQueuedItem = slot.item;
 
-        vcamBattleMain.SetActive(false);
-        vcamAction.SetActive(true);
-        playerBattleUnit.PerformAction(defaultItemAction, activePlayerInstance.transform, OnItemApplied, OnPlayerReturnToSpawn);
+        QueueEffectExecution(slot.item.targetType, slot.item.effectCategory, slot.item.effectValue, slot.item.actionExecution);
+        InventoryManager.Instance.ConsumeItem(slot);
+
+        ExecuteTurnSequence(true);
     }
 
     public void ExecuteFlee()
     {
         battleUIManager.DisableAllInput();
-        bool success = UnityEngine.Random.value > 0.5f;
-
-        if (success)
+        if (UnityEngine.Random.value > 0.5f)
         {
             battleUIManager.ShowMessage("Escaped successfully!");
             Invoke("EndCombatInstance", 1.5f);
@@ -142,88 +199,54 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    // --- UI POPULATION ---
-    public void PopulateSkillUI()
+    private void QueueEffectExecution(ActionTarget target, EffectCategory category, int value, CombatAction action)
     {
-        for (int i = 0; i < battleUIManager.skillButtons.Length; i++)
-        {
-            if (i < activePlayerUnitData.availableSkills.Length)
-            {
-                SkillData skill = activePlayerUnitData.availableSkills[i];
-                battleUIManager.skillButtons[i].gameObject.SetActive(true);
-                battleUIManager.skillButtons[i].GetComponentInChildren<TMPro.TextMeshProUGUI>().text = $"{skill.skillName} ({skill.manaCost}MP)";
-                battleUIManager.skillButtons[i].onClick.RemoveAllListeners();
-                battleUIManager.skillButtons[i].onClick.AddListener(() => ExecuteSkill(skill));
-            }
-            else
-            {
-                battleUIManager.skillButtons[i].gameObject.SetActive(false);
-            }
-        }
+        currentTargetType = target;
+        currentEffectCategory = category;
+        currentEffectValue = value;
+        currentActionExecution = action;
     }
 
-    public void PopulateItemUI()
-    {
-        for (int i = 0; i < battleUIManager.itemButtons.Length; i++)
-        {
-            if (i < SessionManager.Instance.playerInventory.Count)
-            {
-                InventorySlot slot = SessionManager.Instance.playerInventory[i];
-                battleUIManager.itemButtons[i].gameObject.SetActive(true);
-                battleUIManager.itemButtons[i].GetComponentInChildren<TMPro.TextMeshProUGUI>().text = $"{slot.item.itemName} (x{slot.quantity})";
-                battleUIManager.itemButtons[i].onClick.RemoveAllListeners();
-                battleUIManager.itemButtons[i].onClick.AddListener(() => ExecuteItem(slot));
-            }
-            else
-            {
-                battleUIManager.itemButtons[i].gameObject.SetActive(false);
-            }
-        }
-    }
-
-    // --- COMBAT LOGIC ---
     private void ExecuteTurnSequence(bool isPlayer)
     {
-        vcamBattleMain.SetActive(false);
-        vcamAction.SetActive(true);
+        bool useCut = (currentEffectCategory != EffectCategory.PhysicalDamage);
+        GameObject targetCam = vcamBattleMain; 
+
+        if (currentEffectCategory == EffectCategory.PhysicalDamage)
+        {
+            targetCam = vcamActionMelee;
+        }
+        else if (currentTargetType == ActionTarget.Self)
+        {
+            targetCam = isPlayer ? vcamActionSelfPlayer : vcamActionSelfEnemy;
+        }
+        else if (currentTargetType == ActionTarget.Opponent)
+        {
+            targetCam = isPlayer ? vcamActionOpponentEnemy : vcamActionOpponentPlayer;
+        }
+
+        SwitchCamera(targetCam, useCut);
 
         if (isPlayer)
         {
-            Transform target = currentQueuedSkill.isHealing ? activePlayerInstance.transform : activeEnemyInstance.transform;
-            playerBattleUnit.PerformAction(currentQueuedSkill.actionExecution, target, OnPlayerHitTarget, OnPlayerReturnToSpawn);
+            Transform targetTransform = (currentTargetType == ActionTarget.Self) ? activePlayerInstance.transform : activeEnemyInstance.transform;
+            playerBattleUnit.PerformAction(currentActionExecution, targetTransform, OnPlayerHitTarget, OnPlayerReturnToSpawn);
         }
         else
         {
-            currentQueuedSkill = activeEnemyUnitData.basicAttack;
-            enemyBattleUnit.PerformAction(currentQueuedSkill.actionExecution, activePlayerInstance.transform, OnEnemyHitTarget, OnEnemyReturnToSpawn);
+            Transform targetTransform = (currentTargetType == ActionTarget.Self) ? activeEnemyInstance.transform : activePlayerInstance.transform;
+            enemyBattleUnit.PerformAction(currentActionExecution, targetTransform, OnEnemyHitTarget, OnEnemyReturnToSpawn);
         }
     }
 
     private void OnPlayerHitTarget()
     {
-        if (currentQueuedSkill.isHealing)
-        {
-            SessionManager.Instance.playerCurrentHP = Mathf.Min(SessionManager.Instance.playerMaxHP, SessionManager.Instance.playerCurrentHP + currentQueuedSkill.power);
-        }
-        else
-        {
-            int damage = SessionManager.Instance.playerBaseAttack + currentQueuedSkill.power;
-            currentEnemyHealth -= damage;
-        }
-        RefreshUIHUD();
-    }
-
-    private void OnItemApplied()
-    {
-        SessionManager.Instance.playerCurrentHP = Mathf.Min(SessionManager.Instance.playerMaxHP, SessionManager.Instance.playerCurrentHP + currentQueuedItem.healAmount);
-        SessionManager.Instance.playerCurrentMP = Mathf.Min(SessionManager.Instance.playerMaxMP, SessionManager.Instance.playerCurrentMP + currentQueuedItem.manaRestoreAmount);
-        RefreshUIHUD();
+        ProcessEffectResult(true);
     }
 
     private void OnPlayerReturnToSpawn()
     {
-        vcamAction.SetActive(false);
-        vcamBattleMain.SetActive(true);
+        SwitchCamera(vcamBattleMain, true);
         CheckCombatState(true);
     }
 
@@ -231,21 +254,43 @@ public class CombatManager : MonoBehaviour
     {
         battleUIManager.ShowMessage("Enemy Turn!");
         yield return new WaitForSeconds(1f);
+
+        QueueEffectExecution(activeEnemyUnitData.basicAttack.targetType, activeEnemyUnitData.basicAttack.effectCategory, activeEnemyUnitData.basicAttack.effectValue, activeEnemyUnitData.basicAttack.actionExecution);
         ExecuteTurnSequence(false);
     }
 
     private void OnEnemyHitTarget()
     {
-        int damage = activeEnemyUnitData.attackPower + currentQueuedSkill.power;
-        SessionManager.Instance.playerCurrentHP -= damage;
-        RefreshUIHUD();
+        ProcessEffectResult(false);
     }
 
     private void OnEnemyReturnToSpawn()
     {
-        vcamAction.SetActive(false);
-        vcamBattleMain.SetActive(true);
+        SwitchCamera(vcamBattleMain, true); 
         CheckCombatState(false);
+    }
+
+    private void ProcessEffectResult(bool isPlayerAttacking)
+    {
+        if (currentEffectCategory == EffectCategory.PhysicalDamage || currentEffectCategory == EffectCategory.MagicalDamage)
+        {
+            int baseAtk = isPlayerAttacking ? SessionManager.Instance.playerBaseAttack : activeEnemyUnitData.attackPower;
+            int finalDamage = baseAtk + currentEffectValue;
+
+            if (isPlayerAttacking) currentEnemyHealth -= finalDamage;
+            else SessionManager.Instance.playerCurrentHP -= finalDamage;
+        }
+        else if (currentEffectCategory == EffectCategory.HealHP)
+        {
+            if (isPlayerAttacking) SessionManager.Instance.playerCurrentHP = Mathf.Min(SessionManager.Instance.playerMaxHP, SessionManager.Instance.playerCurrentHP + currentEffectValue);
+            else currentEnemyHealth = Mathf.Min(activeEnemyUnitData.maxHealth, currentEnemyHealth + currentEffectValue);
+        }
+        else if (currentEffectCategory == EffectCategory.RestoreMP)
+        {
+            if (isPlayerAttacking) SessionManager.Instance.playerCurrentMP = Mathf.Min(SessionManager.Instance.playerMaxMP, SessionManager.Instance.playerCurrentMP + currentEffectValue);
+        }
+
+        RefreshUIHUD();
     }
 
     private void CheckCombatState(bool wasPlayerTurn)
@@ -273,11 +318,48 @@ public class CombatManager : MonoBehaviour
     private void HandleDefeat()
     {
         battleUIManager.ShowMessage("Defeated...");
-        // Add Game Over logic here later
     }
 
     private void EndCombatInstance()
     {
         SceneManager.LoadScene("OpenWorldScene", LoadSceneMode.Single);
+    }
+
+    public void PopulateSkillUI()
+    {
+        for (int i = 0; i < battleUIManager.skillButtons.Length; i++)
+        {
+            if (i < activePlayerUnitData.availableSkills.Length)
+            {
+                SkillData skill = activePlayerUnitData.availableSkills[i];
+                battleUIManager.skillButtons[i].gameObject.SetActive(true);
+                battleUIManager.skillButtons[i].GetComponentInChildren<TMPro.TextMeshProUGUI>().text = $"{skill.skillName} ({skill.manaCost}MP)";
+                battleUIManager.skillButtons[i].onClick.RemoveAllListeners();
+                battleUIManager.skillButtons[i].onClick.AddListener(() => ExecuteSkill(skill));
+            }
+            else
+            {
+                battleUIManager.skillButtons[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    public void PopulateItemUI()
+    {
+        for (int i = 0; i < battleUIManager.itemButtons.Length; i++)
+        {
+            if (i < InventoryManager.Instance.playerInventory.Count)
+            {
+                InventorySlot slot = InventoryManager.Instance.playerInventory[i];
+                battleUIManager.itemButtons[i].gameObject.SetActive(true);
+                battleUIManager.itemButtons[i].GetComponentInChildren<TMPro.TextMeshProUGUI>().text = $"{slot.item.itemName} (x{slot.quantity})";
+                battleUIManager.itemButtons[i].onClick.RemoveAllListeners();
+                battleUIManager.itemButtons[i].onClick.AddListener(() => ExecuteItem(slot));
+            }
+            else
+            {
+                battleUIManager.itemButtons[i].gameObject.SetActive(false);
+            }
+        }
     }
 }

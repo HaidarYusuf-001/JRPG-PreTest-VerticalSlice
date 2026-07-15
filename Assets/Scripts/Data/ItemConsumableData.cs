@@ -4,6 +4,12 @@ using UnityEngine;
 public class ItemConsumableData : ScriptableObject
 {
     public string itemName;
-    public int healAmount;
-    public int manaRestoreAmount;
+
+    [Header("Effect Settings")]
+    public ActionTarget targetType;
+    public EffectCategory effectCategory;
+    public int effectValue;
+
+    [Header("Animation")]
+    public CombatAction actionExecution;
 }

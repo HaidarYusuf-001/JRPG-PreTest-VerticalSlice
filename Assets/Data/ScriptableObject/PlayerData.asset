@@ -15,7 +15,7 @@ MonoBehaviour:
   unitName: Player
   level: 1
   maxHealth: 100
-  maxMana: 0
+  maxMana: 50
   attackPower: 25
   baseExpYield: 0
   unitPrefab: {fileID: 9131100254173095420, guid: 37a9aae3756a2b2488fca007473bb3be, type: 3}

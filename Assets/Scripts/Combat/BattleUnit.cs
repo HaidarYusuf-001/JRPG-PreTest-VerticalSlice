@@ -6,6 +6,9 @@ public class BattleUnit : MonoBehaviour
 {
     public Animator UnitAnimator { get; private set; }
 
+    [Header("Cinematic Targeting")]
+    public Transform cameraTrackTarget; // Titik di mana kamera akan fokus (LookAt/Follow)
+
     private void Awake()
     {
         UnitAnimator = GetComponentInChildren<Animator>();
@@ -26,7 +29,6 @@ public class BattleUnit : MonoBehaviour
         }
     }
 
-    // Fungsi tunggal yang mengeksekusi semua jenis Scriptable Object aksi
     public void PerformAction(CombatAction actionToPerform, Transform target, Action onHit, Action onReturn)
     {
         if (actionToPerform != null)

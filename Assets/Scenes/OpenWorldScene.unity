@@ -1020,6 +1020,7 @@ GameObject:
   m_Component:
   - component: {fileID: 133525532}
   - component: {fileID: 133525531}
+  - component: {fileID: 133525533}
   m_Layer: 0
   m_Name: SessionManager
   m_TagString: Untagged
@@ -1047,11 +1048,6 @@ MonoBehaviour:
   playerCurrentHP: 0
   playerCurrentMP: 0
   playerBaseAttack: 0
-  playerInventory:
-  - item: {fileID: 11400000, guid: 53b6c6f8ccedeac4ca83d98ff72be75e, type: 2}
-    quantity: 2
-  - item: {fileID: 11400000, guid: 0da0edb1caaf64f4a9f677fb22b1600f, type: 2}
-    quantity: 2
   pendingEnemyData: {fileID: 0}
   savedPlayerPosition: {x: 0, y: 0, z: 0}
   savedPlayerRotation: {x: 0, y: 0, z: 0, w: 0}
@@ -1073,6 +1069,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &133525533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133525530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd366e0be38d72a4faeaf0adf1ada6e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InventoryManager
+  playerInventory:
+  - item: {fileID: 11400000, guid: 53b6c6f8ccedeac4ca83d98ff72be75e, type: 2}
+    quantity: 2
+  - item: {fileID: 11400000, guid: 0da0edb1caaf64f4a9f677fb22b1600f, type: 2}
+    quantity: 2
 --- !u!1 &135781214
 GameObject:
   m_ObjectHideFlags: 0

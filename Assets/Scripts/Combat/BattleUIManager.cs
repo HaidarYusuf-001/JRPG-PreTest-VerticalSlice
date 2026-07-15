@@ -23,10 +23,11 @@ public class BattleUIManager : MonoBehaviour
     public Button backSkillBtn;
     public Button backItemBtn;
 
-    [Header("HUD")]
-    public TextMeshProUGUI playerHPText;
-    public TextMeshProUGUI playerMPText;
-    public TextMeshProUGUI enemyHPText;
+    [Header("HUD Sliders")]
+    public Slider playerHPBar;
+    public Slider playerMPBar;
+    public Slider enemyHPBar;
+    public Slider enemyMPBar;
     public TextMeshProUGUI combatLogText;
 
     public void InitializeUI(CombatManager manager)
@@ -45,11 +46,27 @@ public class BattleUIManager : MonoBehaviour
         ShowMainPanel();
     }
 
-    public void UpdateHUD(int pHP, int pMaxHP, int pMP, int pMaxMP, int eHP, int eMaxHP)
+    public void UpdateHUD(int pHP, int pMaxHP, int pMP, int pMaxMP, int eHP, int eMaxHP, int eMaxMP)
     {
-        playerHPText.text = $"HP: {pHP}/{pMaxHP}";
-        playerMPText.text = $"MP: {pMP}/{pMaxMP}";
-        enemyHPText.text = $"Enemy HP: {Mathf.Max(0, eHP)}/{eMaxHP}";
+        playerHPBar.maxValue = pMaxHP;
+        playerHPBar.value = pHP;
+
+        playerMPBar.maxValue = pMaxMP;
+        playerMPBar.value = pMP;
+
+        enemyHPBar.maxValue = eMaxHP;
+        enemyHPBar.value = eHP;
+
+        if (eMaxMP <= 0)
+        {
+            enemyMPBar.gameObject.SetActive(false);
+        }
+        else
+        {
+            enemyMPBar.gameObject.SetActive(true);
+            enemyMPBar.maxValue = eMaxMP;
+            enemyMPBar.value = 0; 
+        }
     }
 
     public void ShowMessage(string msg)

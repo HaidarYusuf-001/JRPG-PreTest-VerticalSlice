@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillName: Jump Arrack
   manaCost: 0
-  power: 100
-  isHealing: 0
+  targetType: 1
+  effectCategory: 0
+  effectValue: 0
   actionExecution: {fileID: 11400000, guid: 9993b5bbdbfd348438590c7a705265ae, type: 2}

@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: HealthPotion
   m_EditorClassIdentifier: Assembly-CSharp::ItemConsumableData
   itemName: Health Potion
-  healAmount: 30
-  manaRestoreAmount: 0
+  targetType: 0
+  effectCategory: 2
+  effectValue: 30
+  actionExecution: {fileID: 11400000, guid: d68bce0a84ef5ef4c802897a2deb6fb6, type: 2}

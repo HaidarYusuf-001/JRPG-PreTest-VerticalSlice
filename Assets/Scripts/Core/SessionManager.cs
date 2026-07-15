@@ -1,12 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
-
-[System.Serializable]
-public class InventorySlot
-{
-    public ItemConsumableData item;
-    public int quantity;
-}
 
 public class SessionManager : MonoBehaviour
 {
@@ -21,9 +13,6 @@ public class SessionManager : MonoBehaviour
     public int playerCurrentHP;
     public int playerCurrentMP;
     public int playerBaseAttack;
-
-    [Header("Inventory")]
-    public List<InventorySlot> playerInventory = new List<InventorySlot>();
 
     [Header("State Persistence")]
     public UnitData pendingEnemyData;

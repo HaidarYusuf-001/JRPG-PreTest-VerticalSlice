@@ -13,7 +13,13 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: Assembly-CSharp::UnitData
   unitName: Player
+  level: 1
   maxHealth: 100
+  maxMana: 0
   attackPower: 25
+  baseExpYield: 0
   unitPrefab: {fileID: 9131100254173095420, guid: 37a9aae3756a2b2488fca007473bb3be, type: 3}
-  defaultAttack: {fileID: 11400000, guid: 3d1a78089b52c1a4ab7226b0abbceee3, type: 2}
+  basicAttack: {fileID: 11400000, guid: ca6e16e1fd959724a8277a55bddb3894, type: 2}
+  availableSkills:
+  - {fileID: 11400000, guid: 16dbfe3119c3fd545b66801a5e3af6d4, type: 2}
+  - {fileID: 11400000, guid: 71c38fc0515fb6f46a6a5b8d06ec31ab, type: 2}

@@ -11,20 +11,21 @@ public class CombatManager : MonoBehaviour
 
     public Transform playerSpawnPoint;
     public Transform enemySpawnPoint;
-
     public GameObject vcamBattleMain;
     public GameObject vcamAction;
+    public HealAction defaultItemAction;
 
     private UnitData activePlayerUnitData;
     private UnitData activeEnemyUnitData;
-    private int currentPlayerHealth;
     private int currentEnemyHealth;
 
     private GameObject activePlayerInstance;
     private GameObject activeEnemyInstance;
-
     private BattleUnit playerBattleUnit;
     private BattleUnit enemyBattleUnit;
+
+    private SkillData currentQueuedSkill;
+    private ItemConsumableData currentQueuedItem;
 
     private void Start()
     {
@@ -32,24 +33,19 @@ public class CombatManager : MonoBehaviour
         {
             InitializeDynamicCombatSequence(SessionManager.Instance.playerUnitData, SessionManager.Instance.pendingEnemyData);
         }
-        else
-        {
-            Debug.LogError("SessionManager not found! Combat requires persistent data.");
-        }
     }
 
     private void InitializeDynamicCombatSequence(UnitData playerData, UnitData enemyData)
     {
         activePlayerUnitData = playerData;
         activeEnemyUnitData = enemyData;
-
-        currentPlayerHealth = activePlayerUnitData.maxHealth;
         currentEnemyHealth = activeEnemyUnitData.maxHealth;
 
         SpawnCombatants();
         ConfigureCameras();
 
-        battleUIManager.InitializeUI(this, currentPlayerHealth, currentEnemyHealth);
+        RefreshUIHUD();
+        battleUIManager.InitializeUI(this);
         battleEntryDirector.Play();
         Invoke("StartFirstTurn", (float)battleEntryDirector.duration);
     }
@@ -57,26 +53,13 @@ public class CombatManager : MonoBehaviour
     private void SpawnCombatants()
     {
         activePlayerInstance = Instantiate(activePlayerUnitData.unitPrefab, playerSpawnPoint.position, playerSpawnPoint.rotation);
-
-        PlayerController cloneController = activePlayerInstance.GetComponent<PlayerController>();
-        if (cloneController != null)
-        {
-            Destroy(cloneController);
-        }
-
+        Destroy(activePlayerInstance.GetComponent<PlayerController>());
         playerBattleUnit = activePlayerInstance.GetComponent<BattleUnit>();
-        if (playerBattleUnit != null)
-        {
-            playerBattleUnit.SetupForCombat();
-        }
+        playerBattleUnit?.SetupForCombat();
 
         activeEnemyInstance = Instantiate(activeEnemyUnitData.unitPrefab, enemySpawnPoint.position, enemySpawnPoint.rotation);
-
         enemyBattleUnit = activeEnemyInstance.GetComponent<BattleUnit>();
-        if (enemyBattleUnit != null)
-        {
-            enemyBattleUnit.SetupForCombat();
-        }
+        enemyBattleUnit?.SetupForCombat();
     }
 
     private void ConfigureCameras()
@@ -85,23 +68,156 @@ public class CombatManager : MonoBehaviour
         vcamAction.SetActive(false);
     }
 
-    private void StartFirstTurn()
+    private void RefreshUIHUD()
     {
-        battleUIManager.EnableAttackButton();
+        battleUIManager.UpdateHUD(
+            SessionManager.Instance.playerCurrentHP,
+            SessionManager.Instance.playerMaxHP,
+            SessionManager.Instance.playerCurrentMP,
+            SessionManager.Instance.playerMaxMP,
+            currentEnemyHealth,
+            activeEnemyUnitData.maxHealth
+        );
     }
 
-    public void ProcessPlayerTurn()
+    private void StartFirstTurn()
+    {
+        battleUIManager.ShowMessage("Player Turn!");
+        battleUIManager.EnableInput();
+    }
+
+    // --- BUTTON CALLBACKS ---
+    public void ExecutePlayerAttack()
+    {
+        battleUIManager.DisableAllInput();
+        currentQueuedSkill = activePlayerUnitData.basicAttack;
+        ExecuteTurnSequence(true);
+    }
+
+    public void ExecuteSkill(SkillData skill)
+    {
+        if (SessionManager.Instance.playerCurrentMP < skill.manaCost)
+        {
+            battleUIManager.ShowMessage("Not enough MP!");
+            return;
+        }
+
+        SessionManager.Instance.playerCurrentMP -= skill.manaCost;
+        RefreshUIHUD();
+
+        battleUIManager.DisableAllInput();
+        battleUIManager.ShowMainPanel();
+        currentQueuedSkill = skill;
+        ExecuteTurnSequence(true);
+    }
+
+    public void ExecuteItem(InventorySlot slot)
+    {
+        slot.quantity--;
+        if (slot.quantity <= 0) SessionManager.Instance.playerInventory.Remove(slot);
+
+        battleUIManager.DisableAllInput();
+        battleUIManager.ShowMainPanel();
+        currentQueuedItem = slot.item;
+
+        vcamBattleMain.SetActive(false);
+        vcamAction.SetActive(true);
+        playerBattleUnit.PerformAction(defaultItemAction, activePlayerInstance.transform, OnItemApplied, OnPlayerReturnToSpawn);
+    }
+
+    public void ExecuteFlee()
+    {
+        battleUIManager.DisableAllInput();
+        bool success = UnityEngine.Random.value > 0.5f;
+
+        if (success)
+        {
+            battleUIManager.ShowMessage("Escaped successfully!");
+            Invoke("EndCombatInstance", 1.5f);
+        }
+        else
+        {
+            battleUIManager.ShowMessage("Escape failed!");
+            StartCoroutine(ProcessEnemyTurn());
+        }
+    }
+
+    // --- UI POPULATION ---
+    public void PopulateSkillUI()
+    {
+        for (int i = 0; i < battleUIManager.skillButtons.Length; i++)
+        {
+            if (i < activePlayerUnitData.availableSkills.Length)
+            {
+                SkillData skill = activePlayerUnitData.availableSkills[i];
+                battleUIManager.skillButtons[i].gameObject.SetActive(true);
+                battleUIManager.skillButtons[i].GetComponentInChildren<TMPro.TextMeshProUGUI>().text = $"{skill.skillName} ({skill.manaCost}MP)";
+                battleUIManager.skillButtons[i].onClick.RemoveAllListeners();
+                battleUIManager.skillButtons[i].onClick.AddListener(() => ExecuteSkill(skill));
+            }
+            else
+            {
+                battleUIManager.skillButtons[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    public void PopulateItemUI()
+    {
+        for (int i = 0; i < battleUIManager.itemButtons.Length; i++)
+        {
+            if (i < SessionManager.Instance.playerInventory.Count)
+            {
+                InventorySlot slot = SessionManager.Instance.playerInventory[i];
+                battleUIManager.itemButtons[i].gameObject.SetActive(true);
+                battleUIManager.itemButtons[i].GetComponentInChildren<TMPro.TextMeshProUGUI>().text = $"{slot.item.itemName} (x{slot.quantity})";
+                battleUIManager.itemButtons[i].onClick.RemoveAllListeners();
+                battleUIManager.itemButtons[i].onClick.AddListener(() => ExecuteItem(slot));
+            }
+            else
+            {
+                battleUIManager.itemButtons[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    // --- COMBAT LOGIC ---
+    private void ExecuteTurnSequence(bool isPlayer)
     {
         vcamBattleMain.SetActive(false);
         vcamAction.SetActive(true);
 
-        playerBattleUnit.PerformAction(activePlayerUnitData.defaultAttack, activeEnemyInstance.transform, OnPlayerHitTarget, OnPlayerReturnToSpawn);
+        if (isPlayer)
+        {
+            Transform target = currentQueuedSkill.isHealing ? activePlayerInstance.transform : activeEnemyInstance.transform;
+            playerBattleUnit.PerformAction(currentQueuedSkill.actionExecution, target, OnPlayerHitTarget, OnPlayerReturnToSpawn);
+        }
+        else
+        {
+            currentQueuedSkill = activeEnemyUnitData.basicAttack;
+            enemyBattleUnit.PerformAction(currentQueuedSkill.actionExecution, activePlayerInstance.transform, OnEnemyHitTarget, OnEnemyReturnToSpawn);
+        }
     }
 
     private void OnPlayerHitTarget()
     {
-        currentEnemyHealth -= activePlayerUnitData.attackPower;
-        battleUIManager.UpdateEnemyHealth(currentEnemyHealth);
+        if (currentQueuedSkill.isHealing)
+        {
+            SessionManager.Instance.playerCurrentHP = Mathf.Min(SessionManager.Instance.playerMaxHP, SessionManager.Instance.playerCurrentHP + currentQueuedSkill.power);
+        }
+        else
+        {
+            int damage = SessionManager.Instance.playerBaseAttack + currentQueuedSkill.power;
+            currentEnemyHealth -= damage;
+        }
+        RefreshUIHUD();
+    }
+
+    private void OnItemApplied()
+    {
+        SessionManager.Instance.playerCurrentHP = Mathf.Min(SessionManager.Instance.playerMaxHP, SessionManager.Instance.playerCurrentHP + currentQueuedItem.healAmount);
+        SessionManager.Instance.playerCurrentMP = Mathf.Min(SessionManager.Instance.playerMaxMP, SessionManager.Instance.playerCurrentMP + currentQueuedItem.manaRestoreAmount);
+        RefreshUIHUD();
     }
 
     private void OnPlayerReturnToSpawn()
@@ -113,18 +229,16 @@ public class CombatManager : MonoBehaviour
 
     private IEnumerator ProcessEnemyTurn()
     {
-        yield return new WaitForSeconds(0.5f);
-
-        vcamBattleMain.SetActive(false);
-        vcamAction.SetActive(true);
-
-        enemyBattleUnit.PerformAction(activeEnemyUnitData.defaultAttack, activePlayerInstance.transform, OnEnemyHitTarget, OnEnemyReturnToSpawn);
+        battleUIManager.ShowMessage("Enemy Turn!");
+        yield return new WaitForSeconds(1f);
+        ExecuteTurnSequence(false);
     }
 
     private void OnEnemyHitTarget()
     {
-        currentPlayerHealth -= activeEnemyUnitData.attackPower;
-        battleUIManager.UpdatePlayerHealth(currentPlayerHealth);
+        int damage = activeEnemyUnitData.attackPower + currentQueuedSkill.power;
+        SessionManager.Instance.playerCurrentHP -= damage;
+        RefreshUIHUD();
     }
 
     private void OnEnemyReturnToSpawn()
@@ -138,29 +252,31 @@ public class CombatManager : MonoBehaviour
     {
         if (wasPlayerTurn)
         {
-            if (currentEnemyHealth <= 0)
-            {
-                TerminateCombatSequence();
-            }
-            else
-            {
-                StartCoroutine(ProcessEnemyTurn());
-            }
+            if (currentEnemyHealth <= 0) HandleVictory();
+            else StartCoroutine(ProcessEnemyTurn());
         }
         else
         {
-            if (currentPlayerHealth <= 0)
-            {
-                TerminateCombatSequence();
-            }
-            else
-            {
-                battleUIManager.EnableAttackButton();
-            }
+            if (SessionManager.Instance.playerCurrentHP <= 0) HandleDefeat();
+            else StartFirstTurn();
         }
     }
 
-    private void TerminateCombatSequence()
+    private void HandleVictory()
+    {
+        int gainedExp = activeEnemyUnitData.baseExpYield;
+        battleUIManager.ShowMessage($"Victory! Gained {gainedExp} EXP.");
+        SessionManager.Instance.GainExperience(gainedExp);
+        Invoke("EndCombatInstance", 2f);
+    }
+
+    private void HandleDefeat()
+    {
+        battleUIManager.ShowMessage("Defeated...");
+        // Add Game Over logic here later
+    }
+
+    private void EndCombatInstance()
     {
         SceneManager.LoadScene("OpenWorldScene", LoadSceneMode.Single);
     }

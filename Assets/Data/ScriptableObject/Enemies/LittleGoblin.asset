@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: LittleGoblin
   m_EditorClassIdentifier: Assembly-CSharp::UnitData
   unitName: Little Goblin
+  level: 1
   maxHealth: 25
+  maxMana: 0
   attackPower: 5
+  baseExpYield: 50
   unitPrefab: {fileID: 704456876496455557, guid: 77378b372f9186b458678379d99bc098, type: 3}
-  defaultAttack: {fileID: 11400000, guid: 3d1a78089b52c1a4ab7226b0abbceee3, type: 2}
+  basicAttack: {fileID: 11400000, guid: ca6e16e1fd959724a8277a55bddb3894, type: 2}
+  availableSkills: []

@@ -1,46 +1,83 @@
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
+using TMPro;
 
 public class BattleUIManager : MonoBehaviour
 {
-    public TextMeshProUGUI playerHealthText;
-    public TextMeshProUGUI enemyHealthText;
-    public Button attackButton;
-    private CombatManager activeCombatManager;
+    private CombatManager combatManager;
 
-    public void InitializeUI(CombatManager combatManager, int playerHP, int enemyHP)
+    [Header("Main Panels")]
+    public GameObject mainActionPanel;
+    public GameObject skillPanel;
+    public GameObject itemPanel;
+
+    [Header("Main Buttons")]
+    public Button attackBtn;
+    public Button skillBtn;
+    public Button itemBtn;
+    public Button fleeBtn;
+
+    [Header("Dynamic Buttons")]
+    public Button[] skillButtons;
+    public Button[] itemButtons;
+    public Button backSkillBtn;
+    public Button backItemBtn;
+
+    [Header("HUD")]
+    public TextMeshProUGUI playerHPText;
+    public TextMeshProUGUI playerMPText;
+    public TextMeshProUGUI enemyHPText;
+    public TextMeshProUGUI combatLogText;
+
+    public void InitializeUI(CombatManager manager)
     {
-        activeCombatManager = combatManager;
-        UpdatePlayerHealth(playerHP);
-        UpdateEnemyHealth(enemyHP);
-        attackButton.onClick.AddListener(ExecutePlayerAttack);
-        DisableAttackButton();
+        combatManager = manager;
+
+        attackBtn.onClick.AddListener(() => combatManager.ExecutePlayerAttack());
+        skillBtn.onClick.AddListener(ShowSkillPanel);
+        itemBtn.onClick.AddListener(ShowItemPanel);
+        fleeBtn.onClick.AddListener(() => combatManager.ExecuteFlee());
+
+        backSkillBtn.onClick.AddListener(ShowMainPanel);
+        backItemBtn.onClick.AddListener(ShowMainPanel);
+
+        DisableAllInput();
+        ShowMainPanel();
     }
 
-    public void UpdatePlayerHealth(int health)
+    public void UpdateHUD(int pHP, int pMaxHP, int pMP, int pMaxMP, int eHP, int eMaxHP)
     {
-        playerHealthText.text = "Player HP: " + health.ToString();
+        playerHPText.text = $"HP: {pHP}/{pMaxHP}";
+        playerMPText.text = $"MP: {pMP}/{pMaxMP}";
+        enemyHPText.text = $"Enemy HP: {Mathf.Max(0, eHP)}/{eMaxHP}";
     }
 
-    public void UpdateEnemyHealth(int health)
+    public void ShowMessage(string msg)
     {
-        enemyHealthText.text = "Enemy HP: " + health.ToString();
+        combatLogText.text = msg;
     }
 
-    public void EnableAttackButton()
+    public void ShowMainPanel()
     {
-        attackButton.interactable = true;
+        mainActionPanel.SetActive(true);
+        skillPanel.SetActive(false);
+        itemPanel.SetActive(false);
     }
 
-    public void DisableAttackButton()
+    private void ShowSkillPanel()
     {
-        attackButton.interactable = false;
+        mainActionPanel.SetActive(false);
+        skillPanel.SetActive(true);
+        combatManager.PopulateSkillUI();
     }
 
-    private void ExecutePlayerAttack()
+    private void ShowItemPanel()
     {
-        DisableAttackButton();
-        activeCombatManager.ProcessPlayerTurn();
+        mainActionPanel.SetActive(false);
+        itemPanel.SetActive(true);
+        combatManager.PopulateItemUI();
     }
+
+    public void EnableInput() { mainActionPanel.GetComponent<CanvasGroup>().interactable = true; }
+    public void DisableAllInput() { mainActionPanel.GetComponent<CanvasGroup>().interactable = false; }
 }

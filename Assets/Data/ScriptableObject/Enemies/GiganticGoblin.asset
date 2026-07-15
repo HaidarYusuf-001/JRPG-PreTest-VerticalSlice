@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: GiganticGoblin
   m_EditorClassIdentifier: Assembly-CSharp::UnitData
   unitName: Gigantic Goblin
+  level: 5
   maxHealth: 1000
+  maxMana: 0
   attackPower: 100
+  baseExpYield: 1000
   unitPrefab: {fileID: 18729460428243317, guid: c338572f31bb080478cb4a9a46dab35e, type: 3}
-  defaultAttack: {fileID: 11400000, guid: 9993b5bbdbfd348438590c7a705265ae, type: 2}
+  basicAttack: {fileID: 11400000, guid: cd41844db6271b043ab7fb96a0fc5214, type: 2}
+  availableSkills: []

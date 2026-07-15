@@ -20,14 +20,9 @@ public class GameFlowManager : MonoBehaviour
     public PlayerController mainPlayerController;
     public PlayableDirector postBattleCutsceneDirector;
     public Transform postBattleMovementTarget;
-    public Camera explorationMainCamera;
-    public UnitData playerUnitData;
-
     public GameObject vcamExplorationFollow;
 
     private GameState currentGameState;
-    private UnitData pendingEnemyData;
-    private bool isRandomEncounter = false;
     private NPCController activeDialogNPC;
 
     private void Awake()
@@ -44,7 +39,53 @@ public class GameFlowManager : MonoBehaviour
 
     private void Start()
     {
-        ChangeGameState(GameState.Exploration);
+        InitializeSceneState();
+    }
+
+    private void InitializeSceneState()
+    {
+        if (SessionManager.Instance != null && SessionManager.Instance.isReturningFromBattle)
+        {
+            mainPlayerController.transform.position = SessionManager.Instance.savedPlayerPosition;
+            mainPlayerController.transform.rotation = SessionManager.Instance.savedPlayerRotation;
+
+            CinemachineCamera followCam = vcamExplorationFollow.GetComponent<CinemachineCamera>();
+            if (followCam != null)
+            {
+                followCam.PreviousStateIsValid = false;
+            }
+
+            if (SessionManager.Instance.isRandomEncounter)
+            {
+                ChangeGameState(GameState.Exploration);
+            }
+            else
+            {
+                NPCController[] allNPCs = FindObjectsByType<NPCController>(FindObjectsSortMode.None);
+                foreach (NPCController npc in allNPCs)
+                {
+                    if (npc.npcID == SessionManager.Instance.lastInteractedNpcID)
+                    {
+                        activeDialogNPC = npc;
+                        ChangeGameState(GameState.Dialog);
+                        StartCoroutine(DelayFungusBroadcast());
+                        break;
+                    }
+                }
+            }
+
+            SessionManager.Instance.isReturningFromBattle = false;
+        }
+        else
+        {
+            ChangeGameState(GameState.Exploration);
+        }
+    }
+
+    private IEnumerator DelayFungusBroadcast()
+    {
+        yield return null;
+        Flowchart.BroadcastFungusMessage("BattleEnded");
     }
 
     public void ChangeGameState(GameState newState)
@@ -84,9 +125,13 @@ public class GameFlowManager : MonoBehaviour
     public void StartNPCInteraction(NPCController npc)
     {
         activeDialogNPC = npc;
-        pendingEnemyData = npc.npcUnitData;
-        ChangeGameState(GameState.Cutscene);
 
+        if (SessionManager.Instance != null)
+        {
+            SessionManager.Instance.pendingEnemyData = npc.npcUnitData;
+        }
+
+        ChangeGameState(GameState.Cutscene);
         SetDialogCamera(1);
 
         mainPlayerController.TriggerAutoMovement(npc.standMark, false, () =>
@@ -109,58 +154,33 @@ public class GameFlowManager : MonoBehaviour
 
     public void TriggerNPCBattle()
     {
-        isRandomEncounter = false;
-        ChangeGameState(GameState.Combat);
-        StartCoroutine(LoadBattleSceneAdditive());
+        SaveExplorationState(false);
+        SceneManager.LoadScene("BattleScene", LoadSceneMode.Single);
     }
 
     public void TriggerRandomEncounter(UnitData enemyData)
     {
-        isRandomEncounter = true;
-        pendingEnemyData = enemyData;
-        ChangeGameState(GameState.Combat);
-        StartCoroutine(LoadBattleSceneAdditive());
+        if (SessionManager.Instance != null)
+        {
+            SessionManager.Instance.pendingEnemyData = enemyData;
+        }
+        SaveExplorationState(true);
+        SceneManager.LoadScene("BattleScene", LoadSceneMode.Single);
     }
 
-    private IEnumerator LoadBattleSceneAdditive()
+    private void SaveExplorationState(bool isRandom)
     {
-        explorationMainCamera.gameObject.SetActive(false);
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("BattleScene", LoadSceneMode.Additive);
-
-        while (!asyncLoad.isDone)
+        if (SessionManager.Instance != null)
         {
-            yield return null;
-        }
+            SessionManager.Instance.savedPlayerPosition = mainPlayerController.transform.position;
+            SessionManager.Instance.savedPlayerRotation = mainPlayerController.transform.rotation;
+            SessionManager.Instance.isReturningFromBattle = true;
+            SessionManager.Instance.isRandomEncounter = isRandom;
 
-        CombatManager activeCombatManager = Object.FindAnyObjectByType<CombatManager>();
-        activeCombatManager.OnCombatCompleted += HandleCombatCompletion;
-        activeCombatManager.InitializeDynamicCombatSequence(playerUnitData, pendingEnemyData);
-    }
-
-    private void HandleCombatCompletion()
-    {
-        StartCoroutine(UnloadBattleScene());
-    }
-
-    private IEnumerator UnloadBattleScene()
-    {
-        AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync("BattleScene");
-
-        while (!asyncUnload.isDone)
-        {
-            yield return null;
-        }
-
-        explorationMainCamera.gameObject.SetActive(true);
-
-        if (isRandomEncounter)
-        {
-            ChangeGameState(GameState.Exploration);
-        }
-        else
-        {
-            ChangeGameState(GameState.Dialog);
-            Flowchart.BroadcastFungusMessage("BattleEnded");
+            if (!isRandom && activeDialogNPC != null)
+            {
+                SessionManager.Instance.lastInteractedNpcID = activeDialogNPC.npcID;
+            }
         }
     }
 

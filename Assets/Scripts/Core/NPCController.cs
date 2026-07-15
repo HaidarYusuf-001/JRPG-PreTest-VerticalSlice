@@ -3,6 +3,7 @@ using Fungus;
 
 public class NPCController : MonoBehaviour
 {
+    public string npcID;
     public Flowchart dialogFlowchart;
     public string targetBlockName;
     public CanvasGroup promptCanvasGroup;

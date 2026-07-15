@@ -1,12 +1,11 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 using System;
 
 public class CombatManager : MonoBehaviour
 {
-    public event Action OnCombatCompleted;
-
     public BattleUIManager battleUIManager;
     public PlayableDirector battleEntryDirector;
 
@@ -27,7 +26,19 @@ public class CombatManager : MonoBehaviour
     private BattleUnit playerBattleUnit;
     private BattleUnit enemyBattleUnit;
 
-    public void InitializeDynamicCombatSequence(UnitData playerData, UnitData enemyData)
+    private void Start()
+    {
+        if (SessionManager.Instance != null)
+        {
+            InitializeDynamicCombatSequence(SessionManager.Instance.playerUnitData, SessionManager.Instance.pendingEnemyData);
+        }
+        else
+        {
+            Debug.LogError("SessionManager not found! Combat requires persistent data.");
+        }
+    }
+
+    private void InitializeDynamicCombatSequence(UnitData playerData, UnitData enemyData)
     {
         activePlayerUnitData = playerData;
         activeEnemyUnitData = enemyData;
@@ -151,8 +162,6 @@ public class CombatManager : MonoBehaviour
 
     private void TerminateCombatSequence()
     {
-        Destroy(activePlayerInstance);
-        Destroy(activeEnemyInstance);
-        OnCombatCompleted?.Invoke();
+        SceneManager.LoadScene("OpenWorldScene", LoadSceneMode.Single);
     }
 }

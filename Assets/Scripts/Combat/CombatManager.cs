@@ -246,7 +246,8 @@ public class CombatManager : MonoBehaviour
 
     private void OnPlayerReturnToSpawn()
     {
-        SwitchCamera(vcamBattleMain, true);
+        bool useCut = (currentEffectCategory != EffectCategory.PhysicalDamage);
+        SwitchCamera(vcamBattleMain, useCut);
         CheckCombatState(true);
     }
 
@@ -266,7 +267,8 @@ public class CombatManager : MonoBehaviour
 
     private void OnEnemyReturnToSpawn()
     {
-        SwitchCamera(vcamBattleMain, true);
+        bool useCut = (currentEffectCategory != EffectCategory.PhysicalDamage);
+        SwitchCamera(vcamBattleMain, useCut);
         CheckCombatState(false);
     }
 
@@ -318,9 +320,7 @@ public class CombatManager : MonoBehaviour
     private void HandleDefeat()
     {
         battleUIManager.ShowMessage("Defeated...");
-
         SessionManager.Instance.playerCurrentHP = SessionManager.Instance.playerMaxHP;
-
         Invoke("EndCombatInstance", 1.5f);
     }
 

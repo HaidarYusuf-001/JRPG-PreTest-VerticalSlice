@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     private Transform autoMoveTarget;
     private NPCController currentNPC;
     private float currentVelocity;
+    private bool isTalking = false;
 
     private float currentStepDistance = 0f;
     private EncounterArea currentEncounterArea;
@@ -144,7 +145,10 @@ public class PlayerController : MonoBehaviour
             currentNPC = otherCollider.GetComponent<NPCController>();
             if (currentNPC != null)
             {
-                currentNPC.SetPromptVisibility(true);
+                if (canMove && !isTalking && !isAutoMoving)
+                {
+                    currentNPC.SetPromptVisibility(true);
+                }
             }
         }
 
@@ -177,7 +181,8 @@ public class PlayerController : MonoBehaviour
     public void SetTalkingState(bool state)
     {
         if (animator != null) animator.SetBool("isTalking", state);
-    }
+        isTalking = state;
+}
 
     public void SetMovementState(bool state)
     {

@@ -107,14 +107,22 @@ public class GameFlowManager : MonoBehaviour
                 {
                     activeNPC.SetPromptVisibility(true);
                 }
+
+                activeDialogNPC = null;
                 break;
-            case GameState.Dialog:
+
+            case GameState.Dialog:               
             case GameState.Combat:
             case GameState.Cutscene:
                 mainPlayerController.SetMovementState(false);
 
+                if (activeDialogNPC != null)
+                {
+                    activeDialogNPC.SetPromptVisibility(false);
+                }
+
                 NPCController currentNPC = mainPlayerController.GetCurrentNPC();
-                if (currentNPC != null)
+                if (currentNPC != null && currentNPC != activeDialogNPC)
                 {
                     currentNPC.SetPromptVisibility(false);
                 }

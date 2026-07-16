@@ -16,5 +16,5 @@ MonoBehaviour:
   manaCost: 20
   targetType: 1
   effectCategory: 0
-  effectValue: 10
-  actionExecution: {fileID: 11400000, guid: 3d1a78089b52c1a4ab7226b0abbceee3, type: 2}
+  effectValue: 30
+  actionExecution: {fileID: 11400000, guid: 4f92417a7d1047641929fa06e356fda2, type: 2}

@@ -61,7 +61,6 @@ public class GameFlowManager : MonoBehaviour
             }
             else
             {
-                // FIX: API Baru Unity pengganti FindObjectsSortMode
                 NPCController[] allNPCs = FindObjectsByType<NPCController>(FindObjectsInactive.Exclude);
                 foreach (NPCController npc in allNPCs)
                 {
@@ -156,7 +155,7 @@ public class GameFlowManager : MonoBehaviour
     public void TriggerNPCBattle()
     {
         SaveExplorationState(false);
-        SceneManager.LoadScene("BattleScene", LoadSceneMode.Single);
+        SceneTransitionManager.Instance.LoadSceneWithFade("BattleScene");
     }
 
     public void TriggerRandomEncounter(UnitData enemyData)
@@ -166,7 +165,7 @@ public class GameFlowManager : MonoBehaviour
             SessionManager.Instance.pendingEnemyData = enemyData;
         }
         SaveExplorationState(true);
-        SceneManager.LoadScene("BattleScene", LoadSceneMode.Single);
+        SceneTransitionManager.Instance.LoadSceneWithFade("BattleScene");
     }
 
     private void SaveExplorationState(bool isRandom)

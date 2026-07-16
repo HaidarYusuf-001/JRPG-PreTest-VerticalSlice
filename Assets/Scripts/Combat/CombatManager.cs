@@ -56,11 +56,11 @@ public class CombatManager : MonoBehaviour
         currentEnemyHealth = activeEnemyUnitData.maxHealth;
 
         SpawnCombatants();
-        SwitchCamera(vcamBattleMain, false); 
+        SwitchCamera(vcamBattleMain, false);
 
         RefreshUIHUD();
         battleUIManager.InitializeUI(this);
-        Invoke("StartFirstTurn", 1.5f);
+        Invoke("StartFirstTurn", 0.5f);
     }
 
     private void SpawnCombatants()
@@ -190,7 +190,7 @@ public class CombatManager : MonoBehaviour
         if (UnityEngine.Random.value > 0.5f)
         {
             battleUIManager.ShowMessage("Escaped successfully!");
-            Invoke("EndCombatInstance", 1.5f);
+            Invoke("EndCombatInstance", 1f);
         }
         else
         {
@@ -210,7 +210,7 @@ public class CombatManager : MonoBehaviour
     private void ExecuteTurnSequence(bool isPlayer)
     {
         bool useCut = (currentEffectCategory != EffectCategory.PhysicalDamage);
-        GameObject targetCam = vcamBattleMain; 
+        GameObject targetCam = vcamBattleMain;
 
         if (currentEffectCategory == EffectCategory.PhysicalDamage)
         {
@@ -266,7 +266,7 @@ public class CombatManager : MonoBehaviour
 
     private void OnEnemyReturnToSpawn()
     {
-        SwitchCamera(vcamBattleMain, true); 
+        SwitchCamera(vcamBattleMain, true);
         CheckCombatState(false);
     }
 
@@ -312,17 +312,21 @@ public class CombatManager : MonoBehaviour
         int gainedExp = activeEnemyUnitData.baseExpYield;
         battleUIManager.ShowMessage($"Victory! Gained {gainedExp} EXP.");
         SessionManager.Instance.GainExperience(gainedExp);
-        Invoke("EndCombatInstance", 2f);
+        Invoke("EndCombatInstance", 1f);
     }
 
     private void HandleDefeat()
     {
         battleUIManager.ShowMessage("Defeated...");
+
+        SessionManager.Instance.playerCurrentHP = SessionManager.Instance.playerMaxHP;
+
+        Invoke("EndCombatInstance", 1.5f);
     }
 
     private void EndCombatInstance()
     {
-        SceneManager.LoadScene("OpenWorldScene", LoadSceneMode.Single);
+        SceneTransitionManager.Instance.LoadSceneWithFade("OpenWorldScene");
     }
 
     public void PopulateSkillUI()
